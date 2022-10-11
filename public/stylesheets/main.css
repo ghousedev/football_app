@@ -1,5 +1,9 @@
+.grim-red-color{
+color: #c02231;
+}
+
 .jumbotron {
-padding-top: 8%;
+padding-top: 12%;
 padding: 5%;
 text-align: center;
 }
