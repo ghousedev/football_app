@@ -9,10 +9,11 @@ class MemoryTeamService extends TeamService {
   override def create(team: Team): Unit = mutableList += team
 
   override def update(team: Team): Try[Team] = {
-    Try(mutableList.find(t => t.id == team.id).getOrElse(
-      Try(mutableList.filterInPlace(t => t.id != team.id).addOne(team))
-    )
-    )
+//    Try(mutableList.find(t => t.id == team.id).getOrElse(
+//      Try(mutableList.filterInPlace(t => t.id != team.id).addOne(team))
+//    )
+//    )
+    Try(team)
   }
 
   override def findById(id: Long): Option[Team] = mutableList.find(t => t.id == id)
