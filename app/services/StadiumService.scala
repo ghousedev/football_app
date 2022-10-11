@@ -1,15 +1,15 @@
 package services
 
-import models.Team
+import models.Stadium
 
 trait StadiumService {
-  def create(team: Team)
+  def create(stadium: Stadium)
 
-  def update(team: Team)
+  def update(stadium: Stadium)
 
   def findById(id: Long)
 
   def findAll()
 
-  def findByCountry(firstName: String)
+  def findByCountry(country: String)
 }
