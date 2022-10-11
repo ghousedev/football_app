@@ -1,10 +1,10 @@
 package services
-import models.{Position, Team}
+import models.{Player, Position}
 
 class MemoryPlayerService extends PlayerService {
-  override def create(team: Team): Unit = ???
+  override def create(player: Player): Unit = ???
 
-  override def update(team: Team): Unit = ???
+  override def update(player: Player): Unit = ???
 
   override def findById(id: Long): Unit = ???
 
