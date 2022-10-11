@@ -2,7 +2,7 @@ package services
 import models.Team
 
 import scala.collection.mutable.ListBuffer
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
 class MemoryTeamService extends TeamService {
   val mutableList: ListBuffer[Team] = ListBuffer.empty
@@ -10,7 +10,7 @@ class MemoryTeamService extends TeamService {
 
   override def update(team: Team): Try[Team] = {
     Try(mutableList.find(t => t.id == team.id).head).map(t => {
-      mutableList.filterInPlace(t => t.id != team.id).addOne(t)
+      mutableList.filterInPlace(t => t.id != team.id).addOne(team)
       t
     })
   }

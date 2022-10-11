@@ -1,15 +1,17 @@
 package services
 
-import models.Team
+import models.Stadium
+
+import scala.util.Try
 
 trait StadiumService {
-  def create(team: Team)
+  def create(stadium: Stadium): Unit
 
-  def update(team: Team)
+  def update(stadium: Stadium): Try[Stadium]
 
-  def findById(id: Long)
+  def findById(id: Long): Option[Stadium]
 
-  def findAll()
+  def findAll(): List[Stadium]
 
-  def findByCountry(firstName: String)
+  def findByCountry(country: String): List[Stadium]
 }
