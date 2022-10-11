@@ -6,7 +6,9 @@ class MemoryTeamService extends TeamService {
 
   override def update(team: Team): Unit = ???
 
-  override def findById(id: Long): Unit = ???
+  override def findById(id: Long): Team = ???
 
-  override def findAll(): Unit = ???
+  override def findAll(): List[Team] = ???
+
+  override def findByName(name: String): Team = ???
 }
