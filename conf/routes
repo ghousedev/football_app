@@ -20,3 +20,12 @@ GET         /stadium                     controllers.StadiumController.init()
 GET         /stadium/:id                 controllers.StadiumController.show(id:Long)
 
 POST        /stadium                     controllers.StadiumController.create()
+
+
+GET         /players                    controllers.PlayerController.list()
+
+GET         /player                     controllers.PlayerController.init()
+
+GET         /player/:id                 controllers.PlayerController.show(id:Long)
+
+POST        /player                     controllers.PlayerController.create()

@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Player
+import models._
 
 import javax.inject._
 import play.api._
@@ -13,11 +13,17 @@ import scala.util.hashing.MurmurHash3
 case class PlayersData(team: String, position: String)
 
 class PlayersController @Inject() (
-                                    val controllerComponents: ControllerComponents
-                                  ) extends BaseController {
+    val controllerComponents: ControllerComponents
+) extends BaseController {
+
+  val GrimsbyTown =
+    Team(55L, "Grimsby Town", Stadium(15L, "The Dripping Pan", "A", "B", 5))
+
   def list() = Action { implicit request =>
     val result = List(
-      Player("Grimsby Town": Team, "Forward": Position)
+      Player(GrimsbyTown, Striker),
+      Player(GrimsbyTown, GoalKeeper),
+      Player(GrimsbyTown, LeftMidfielder)
     )
     Ok(views.html.players.players(result))
   }
@@ -25,8 +31,7 @@ class PlayersController @Inject() (
   val playersForm = Form(
     mapping(
       "team" -> text,
-      "position" -> text,
-
+      "position" -> text
     )(PlayersData.apply) //Construction
     (PlayersData.unapply) //Destructuring
   )
@@ -46,8 +51,7 @@ class PlayersController @Inject() (
         val newUser = models.Player(
           id,
           playersData.team,
-          playersData.position,
-
+          playersData.position
         )
         println("Yay!" + newUser)
         Redirect(routes.PlayersController.show(id))
