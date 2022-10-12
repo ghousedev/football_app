@@ -22,9 +22,9 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.index())
   }
 
-  def players() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.players.players())
-  }
+//  def players() = Action { implicit request: Request[AnyContent] =>
+//    Ok(views.html.players.players())
+//  }
 
   def manager() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.manager())

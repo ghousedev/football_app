@@ -8,11 +8,12 @@ import play.api.data.Form
 import play.api.data.Forms.{mapping, text}
 import play.api.mvc._
 
+import scala.util.Random
 import scala.util.hashing.MurmurHash3
 
-case class PlayersData(team: String, position: String)
+case class PlayerData(team: String, position: String)
 
-class PlayersController @Inject() (
+class PlayerController @Inject() (
     val controllerComponents: ControllerComponents
 ) extends BaseController {
 
@@ -32,8 +33,8 @@ class PlayersController @Inject() (
     mapping(
       "team" -> text,
       "position" -> text
-    )(PlayersData.apply) //Construction
-    (PlayersData.unapply) //Destructuring
+    )(PlayerData.apply) //Construction
+    (PlayerData.unapply) //Destructuring
   )
 
   def init(): Action[AnyContent] = Action { implicit request =>
@@ -49,12 +50,24 @@ class PlayersController @Inject() (
       playersData => {
         val id = MurmurHash3.stringHash(playersData.team)
         val newUser = models.Player(
-          id,
-          playersData.team,
-          playersData.position
+          Team(10L, playersData.team, Stadium(Random.nextLong(), "", "", "", 0)),
+          playersData.position match {
+            case "GoalKeeper" => GoalKeeper
+            case "RightFullback" => RightFullback
+            case "LeftFullback" => LeftFullback
+            case "CenterBack" => CenterBack
+            case "Sweeper" => Sweeper
+            case "Striker" => Striker
+            case "HoldingMidfielder" => HoldingMidfielder
+            case "RightMidfielder" => RightMidfielder
+            case "Central" => Central
+            case "AttackingMidfielder" => AttackingMidfielder
+            case "LeftMidfielder" => LeftMidfielder
+            case _ => ???
+          }
         )
         println("Yay!" + newUser)
-        Redirect(routes.PlayersController.show(id))
+        Redirect(routes.PlayerController.show(id))
       }
     )
   }
