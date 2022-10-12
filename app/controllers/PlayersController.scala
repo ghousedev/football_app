@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Player
+import models.{Player, Team}
 
 import javax.inject._
 import play.api._
@@ -12,15 +12,9 @@ import scala.util.hashing.MurmurHash3
 
 case class PlayersData(team: String, position: String)
 
-class PlayersController @Inject() (
-                                    val controllerComponents: ControllerComponents
-                                  ) extends BaseController {
-  def list() = Action { implicit request =>
-    val result = List(
-      Player("Grimsby Town": Team, "Forward": Position)
-    )
-    Ok(views.html.players.players(result))
-  }
+class PlayersController @Inject()(
+                                   val controllerComponents: ControllerComponents
+                                 ) extends BaseController {
 
   val playersForm = Form(
     mapping(
