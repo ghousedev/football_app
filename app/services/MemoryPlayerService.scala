@@ -1,18 +1,31 @@
 package services
-import models.{Player, Position}
+
+import models.Player
+
+import scala.collection.mutable.ListBuffer
+import scala.util.Try
 
 class MemoryPlayerService extends PlayerService {
-  override def create(player: Player): Unit = ???
+  val mutableList: ListBuffer[Player] = ListBuffer.empty
 
-  override def update(player: Player): Unit = ???
+  override def findById(id: Long): Option[Player] =
+    mutableList.find(t => t.id == id)
 
-  override def findById(id: Long): Unit = ???
+  override def create(player: Player): Unit = mutableList += player
 
-  override def findAll(): Unit = ???
+  override def update(player: Player): Try[Player] = {
+    Try(mutableList.find(t => t.id == player.id).head)
+      .map(t => {
+        mutableList.filterInPlace(t => t.id != player.id).addOne(player);
+        player
+      })
+  }
 
-  override def findByFirstName(firstName: String): Unit = ???
+  override def findAll(): List[Player] = mutableList.toList
 
-  override def findByLastName(lastName: String): Unit = ???
+  override def findByName(name: String): Option[Player] =
+    mutableList.find(t => t.name == name)
 
-  override def findByPosition(position: Position): Unit = ???
+  override def findByCountry(country: String): List[Player] =
+    mutableList.filter(t => t.country == country).toList
 }

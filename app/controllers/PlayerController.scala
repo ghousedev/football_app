@@ -11,21 +11,23 @@ import play.api.mvc._
 import scala.util.Random
 import scala.util.hashing.MurmurHash3
 
-case class PlayerData(team: String, position: String, firstName: String, surname: String)
+import services.PlayerService
+
+case class PlayerData(
+    team: String,
+    position: String,
+    firstName: String,
+    surname: String
+)
 
 class PlayerController @Inject() (
-    val controllerComponents: ControllerComponents
-) extends BaseController {
-
-  val GrimsbyTown =
-    Team(55L, "Grimsby Town", Stadium(15L, "The Dripping Pan", "A", "B", 5))
+    val controllerComponents: ControllerComponents,
+    val playerService: PlayerService
+) extends BaseController
+    with play.api.i18n.I18nSupport {
 
   def list() = Action { implicit request =>
-    val result = List(
-      Player(GrimsbyTown, Striker, "", ""),
-      Player(GrimsbyTown, GoalKeeper, "", ""),
-      Player(GrimsbyTown, LeftMidfielder, "", "")
-    )
+    val result = playerService.findAll()
     Ok(views.html.players.players(result))
   }
 
@@ -51,27 +53,40 @@ class PlayerController @Inject() (
       },
       playersData => {
         val id = MurmurHash3.stringHash(playersData.team)
-        val newUser = models.Player(Team(10L, playersData.team, Stadium(Random.nextLong(), "", "", "", 0)), playersData.position match {
-            case "GoalKeeper" => GoalKeeper
-            case "RightFullback" => RightFullback
-            case "LeftFullback" => LeftFullback
-            case "CenterBack" => CenterBack
-            case "Sweeper" => Sweeper
-            case "Striker" => Striker
-            case "HoldingMidfielder" => HoldingMidfielder
-            case "RightMidfielder" => RightMidfielder
-            case "Central" => Central
+        val newPlayers = models.Player(
+          Team(
+            10L,
+            playersData.team,
+            Stadium(Random.nextLong(), "", "", "", 0)
+          ),
+          playersData.position match {
+            case "GoalKeeper"          => GoalKeeper
+            case "RightFullback"       => RightFullback
+            case "LeftFullback"        => LeftFullback
+            case "CenterBack"          => CenterBack
+            case "Sweeper"             => Sweeper
+            case "Striker"             => Striker
+            case "HoldingMidfielder"   => HoldingMidfielder
+            case "RightMidfielder"     => RightMidfielder
+            case "Central"             => Central
             case "AttackingMidfielder" => AttackingMidfielder
-            case "LeftMidfielder" => LeftMidfielder
-            case _ => GoalKeeper
-          }, "", "")
-        println("Yay!" + newUser)
+            case "LeftMidfielder"      => LeftMidfielder
+            case _                     => GoalKeeper
+          },
+          "",
+          ""
+        )
+        println("Yay!" + newPlayers)
+        playerService.create(newPlayers)
         Redirect(routes.PlayerController.show(id))
       }
     )
   }
 
   def show(id: Long) = Action { implicit request =>
-    Ok("This is placeholder for this player")
+    val maybePlayers = playerService.findById(id)
+    maybePlayers
+      .map(s => Ok(views.html.players.show(s)))
+      .getOrElse(NotFound("Sorry, that player is not found"))
   }
 }
