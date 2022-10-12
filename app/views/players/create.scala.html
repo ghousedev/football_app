@@ -1,0 +1,29 @@
+@(playersForm: Form[PlayerData])
+
+@main("Create Player") {
+<form id="create_player" action="/player" method="post" class="top-padding">
+  <label for="name">First Name:</label><input type="text" id="name" name="name" value="@playersForm("name").value"/>
+  <label for="surname">Surname:</label><input type="text" id="surname" name="surname" value="@playersForm("surname").value"/>
+  <label for="surname">Team:</label><input type="text" id="team" name="team" value="@playersForm("team").value"/>
+  <label for="positions">Position:</label>
+  <input list="positions" name="position" value="@playersForm("position").value">
+  <datalist id="positions">
+    <option value="GoalKeeper">
+    <option value="RightFullback">
+    <option value="LeftFullback">
+    <option value="CenterBack">
+    <option value="Sweeper">
+    <option value="Striker">
+    <option value="HoldingMidfielder">
+    <option value="RightMidfielder">
+    <option value="Central">
+    <option value="AttackingMidfielder">
+    <option value="LeftMidfielder">
+  </datalist>
+  <input type="submit" id="submit" value="Submit"/>
+</form>
+}
+<!--
+<input type="" id="position" name="position" value="@playersForm("position").value"/>
+<input list="positions">
+-->

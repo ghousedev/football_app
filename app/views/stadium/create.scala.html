@@ -1,0 +1,17 @@
+@(stadiumForm: Form[StadiumData])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+
+@main("Create Stadium") {
+<div class="container top-padding">
+    <form>
+        <div class="form-group">
+            @helper.form(action = routes.StadiumController.create()) {
+            @helper.inputText(stadiumForm("name"))
+            @helper.inputText(stadiumForm("city"))
+            @helper.inputText(stadiumForm("country"))
+            @helper.inputText(stadiumForm("seats"))
+            <input class="btn btn-md btn-danger" type="submit" id="submit" value="Submit"/>
+            }
+        </div>
+    </form>
+</div>
+}
