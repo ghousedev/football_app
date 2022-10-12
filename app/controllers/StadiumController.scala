@@ -13,8 +13,8 @@ import scala.util.hashing.MurmurHash3
 case class StadiumData(name: String, city: String, country: String, seats: Int)
 
 class StadiumController @Inject() (
-                                    val controllerComponents: ControllerComponents
-                                  ) extends BaseController {
+    val controllerComponents: ControllerComponents
+) extends BaseController {
   def list() = Action { implicit request =>
     val result = List(
       Stadium(10L, "Stamford Bridge", "A", "B", -500),
