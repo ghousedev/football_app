@@ -37,5 +37,5 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   def table() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.table())
   }
-
 }
+
