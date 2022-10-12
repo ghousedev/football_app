@@ -1,0 +1,9 @@
+@(playersForm: Form[PlayersData])
+
+@main("Create Player") {
+<form id="create_player" action="/players" method="post">
+  <label for="name">Name:</label><input type="text" id="name" name="name" value="@playersForm("name").value"/>
+  <label for="position">Name:</label><input type="text" id="position" name="position" value="@playersForm("position").value"/>
+  <input type="submit" id="submit" value="Submit"/>
+</form>
+}
