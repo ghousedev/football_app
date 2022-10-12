@@ -14,7 +14,7 @@ case class StadiumData(name: String, city: String, country: String, seats: Int)
 
 class StadiumController @Inject() (
     val controllerComponents: ControllerComponents
-) extends BaseController {
+) extends BaseController with play.api.i18n.I18nSupport {
   def list() = Action { implicit request =>
     val result = List(
       Stadium(10L, "Stamford Bridge", "A", "B", -500),
