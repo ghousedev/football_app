@@ -93,7 +93,7 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
 
     "render the stadium page" in {
         val controller = inject[HomeController]
-        val home = controller.stadium()(FakeRequest(GET, "/stadium"))
+        val home = controller.stadiumInfo()(FakeRequest(GET, "/stadium"))
 
         status(home) mustBe OK
         contentType(home) mustBe Some("text/html")
