@@ -2,12 +2,12 @@
 
 @main("Create Stadium") {
 <div class="container top-padding">
-        @helper.form(action = routes.StadiumController.create()) {
-        @helper.inputText(stadiumForm("name"))
-        @helper.inputText(stadiumForm("city"))
-        @helper.inputText(stadiumForm("country"))
-        @helper.inputText(stadiumForm("seats"))
-        <input type="submit" id="submit" value="Submit"/>
+    @helper.form(action = routes.StadiumController.create()) {
+    @helper.inputText(stadiumForm("name"))
+    @helper.inputText(stadiumForm("city"))
+    @helper.inputText(stadiumForm("country"))
+    @helper.inputText(stadiumForm("seats"))
+    <input type="submit" id="submit" value="Submit"/>
     }
 </div>
 }
