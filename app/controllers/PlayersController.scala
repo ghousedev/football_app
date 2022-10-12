@@ -10,21 +10,21 @@ import play.api.mvc._
 
 import scala.util.hashing.MurmurHash3
 
-case class PlayersData(name: String, position: String)
+case class PlayersData(team: String, position: String)
 
 class PlayersController @Inject() (
                                     val controllerComponents: ControllerComponents
                                   ) extends BaseController {
   def list() = Action { implicit request =>
     val result = List(
-      Player("Gary": String, "Forward")
+      Player("Grimsby Town": Team, "Forward": Position)
     )
     Ok(views.html.players.players(result))
   }
 
   val playersForm = Form(
     mapping(
-      "name" -> text,
+      "team" -> text,
       "position" -> text,
 
     )(PlayersData.apply) //Construction
@@ -42,10 +42,10 @@ class PlayersController @Inject() (
         BadRequest(views.html.players.create(formWithErrors))
       },
       playersData => {
-        val id = MurmurHash3.stringHash(playersData.name)
+        val id = MurmurHash3.stringHash(playersData.team)
         val newUser = models.Player(
           id,
-          playersData.name,
+          playersData.team,
           playersData.position,
 
         )
