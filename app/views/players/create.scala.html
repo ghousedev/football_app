@@ -1,7 +1,7 @@
 @(playersForm: Form[PlayerData])
 
 @main("Create Player") {
-<form id="create_player" action="/players" method="post" style="margin-top: 5rem">
+<form id="create_player" action="/player" method="post" style="margin-top: 5rem">
   <label for="name">Name:</label><input type="text" id="name" name="name" value="@playersForm("name").value"/>
   <label for="positions">Position:</label>
   <input list="positions" value="@playersForm("position").value">
