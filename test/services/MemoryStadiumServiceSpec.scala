@@ -24,7 +24,7 @@ class MemoryStadiumServiceSpec extends PlaySpec {
       val memoryStadiumService = new MemoryStadiumService
       val stadium = Stadium(10L, "Emirates Stadium", "London", "England", 60000)
       memoryStadiumService.create(stadium)
-      val result = memoryStadiumService.findById(10L)
+      val result = memoryStadiumService.findById(11L)
       result mustBe Option.empty
     }
     "updating a stadium must change the values" in {
@@ -34,7 +34,7 @@ class MemoryStadiumServiceSpec extends PlaySpec {
       val updatedStadium = Stadium(10L, "Emirates Stadium", "London", "England", 62000)
       memoryStadiumService.update(updatedStadium)
       val result = memoryStadiumService.findById(updatedStadium.id).get
-      result mustBe Stadium(10L, "Emirates Stadium", "London", "England", 60000)
+      result mustBe Stadium(10L, "Emirates Stadium", "London", "England", 62000)
       memoryStadiumService.findAll().size mustBe 1
     }
 
