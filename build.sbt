@@ -15,7 +15,6 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 )
 
-
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "dev.ghouse.controllers._"
 
