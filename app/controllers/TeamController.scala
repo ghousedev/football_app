@@ -17,13 +17,14 @@ class TeamController @Inject() (
     val controllerComponents: ControllerComponents,
     val teamService: TeamService,
     val stadiumService: StadiumService
-) extends BaseController with play.api.i18n.I18nSupport {
+) extends BaseController
+    with play.api.i18n.I18nSupport {
   def list() = Action { implicit request =>
     val result = teamService.findAll()
     Ok(views.html.team.teams(result))
   }
 
-  val teamForm : Form[TeamData] = Form(
+  val teamForm: Form[TeamData] = Form(
     mapping(
       "name" -> text,
       "stadium" -> longNumber
@@ -45,21 +46,29 @@ class TeamController @Inject() (
         BadRequest(views.html.team.create(formWithErrors, stadList))
       },
       teamData => {
-        val stad = stadiumService.findById(teamData.stadiumId)
+        val maybeStadium = stadiumService.findById(teamData.stadiumId)
         val id = MurmurHash3.stringHash(teamData.name)
-        val newTeam = models.Team(
-          id,
-          teamData.name,
-          stad.get,
-        )
-        println("Yay!" + newTeam)
-        teamService.create(newTeam)
-        Redirect(routes.TeamController.show(id))
+        maybeStadium
+          .map { s =>
+            models.Team(
+              id,
+              teamData.name,
+              s
+            )
+          }
+          .map { t =>
+            teamService.create(t); t
+          }
+          .map(t => Redirect(routes.TeamController.show(id)))
+          .getOrElse(NotFound("Stadium not found"))
       }
     )
   }
 
   def show(id: Long) = Action { implicit request =>
     val maybeTeam = teamService.findById(id)
-    maybeTeam.map(s => Ok(views.html.team.show(s))).getOrElse(NotFound(s"No team matches id: $id"))  }
+    maybeTeam
+      .map(s => Ok(views.html.team.show(s)))
+      .getOrElse(NotFound(s"No team matches id: $id"))
+  }
 }
