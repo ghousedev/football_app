@@ -1,10 +1,13 @@
-@(teamForm: Form[TeamData])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+@(teamForm: Form[TeamData], stadiumList: List[Stadium])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
 
 @main("Create Stadium") {
 <div class="container top-padding">
         @helper.form(action = routes.StadiumController.create()) {
         @helper.inputText(teamForm("name"))
-        @helper.inputText(teamForm("stadium"))
+        @helper.select(
+            field = teamForm("Stadium"),
+            options = stadiumList.map(s => s.id -> s.name)
+        )
         <input type="submit" id="submit" value="Submit"/>
     }
 </div>
