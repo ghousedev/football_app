@@ -3,15 +3,15 @@ package controllers
 import models.{Stadium, Team}
 import play.api._
 import play.api.data.Form
-import play.api.data.Forms.{mapping, text}
+import play.api.data.Forms.{longNumber, mapping, number, text}
 import play.api.mvc._
-import services.{StadiumService, TeamService, MemoryStadiumService}
+import services.{MemoryStadiumService, StadiumService, TeamService}
 
 import javax.inject._
 import scala.util.Random
 import scala.util.hashing.MurmurHash3
 
-case class TeamData(name: String, stadium: Stadium)
+case class TeamData(name: String, stadiumId: Long)
 
 class TeamController @Inject() (
     val controllerComponents: ControllerComponents,
@@ -26,27 +26,30 @@ class TeamController @Inject() (
   val teamForm : Form[TeamData] = Form(
     mapping(
       "name" -> text,
-      "stadium" -> text
+      "stadium" -> longNumber
     )(TeamData.apply) //Construction
     (TeamData.unapply) //Destructuring
   )
 
   def init(): Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.team.create(teamForm))
+    val stadList = stadiumService.findAll()
+    Ok(views.html.team.create(teamForm, stadList))
   }
 
   def create() = Action { implicit request =>
     teamForm.bindFromRequest.fold(
       formWithErrors => {
+        val stadList = stadiumService.findAll()
         println("Nay!" + formWithErrors)
-        BadRequest(views.html.team.create(formWithErrors))
+        BadRequest(views.html.team.create(formWithErrors, stadList))
       },
       teamData => {
+        val stad = stadiumService.findById(teamData.stadiumId)
         val id = MurmurHash3.stringHash(teamData.name)
         val newTeam = models.Team(
           id,
           teamData.name,
-          teamData.stadium,
+          stad.get,
         )
         println("Yay!" + newTeam)
         teamService.create(newTeam)
