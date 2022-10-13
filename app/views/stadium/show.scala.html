@@ -1,7 +1,10 @@
 @(stadium: Stadium)
 
 @main("View Stadium") {
-<div class="container top-padding">
-    Name: @stadium.name
+<div class="jumbotron">
+   <h1>Stadium Name:</h1>
+    <h2>@stadium.name</h2>
+    <br>
+    <img class="grim-stadium" src="@routes.Assets.versioned("images/grim-stadium.jpeg")" alt="Grimsby Town Stadium">
 </div>
 }
