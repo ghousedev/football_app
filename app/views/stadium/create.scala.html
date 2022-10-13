@@ -2,8 +2,10 @@
 @import views.html.helper.CSRF
 
 @main("Create Stadium") {
-<div class="jumbotron">
-    <div class="container top-padding">
+<div class="container main-container">
+    <br>
+    <h1>Create a new Stadium</h1>
+    <div class="container">
         @helper.form(action = routes.StadiumController.create()) {
         @CSRF.formField
         @helper.inputText(stadiumForm("name"))

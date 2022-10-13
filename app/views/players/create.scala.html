@@ -1,6 +1,9 @@
 @(playersForm: Form[PlayerData])
 
 @main("Create Player") {
+<div class="container main-container">
+<br>
+<h1>Create a new Player</h1>
 <form id="create_player" action="/player" method="post" class="top-padding">
   <label for="name">First Name:</label><input type="text" id="name" name="name" value="@playersForm("name").value"/>
   <label for="surname">Surname:</label><input type="text" id="surname" name="surname" value="@playersForm("surname").value"/>
@@ -22,6 +25,7 @@
   </datalist>
   <input class="btn btn-md btn-danger" type="submit" id="submit" value="Submit"/>
 </form>
+</div>
 }
 <!--
 <input type="" id="position" name="position" value="@playersForm("position").value"/>

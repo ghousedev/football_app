@@ -1,15 +1,46 @@
+/* ###### global style ###### */
 .grim-red-color{
 color: #c02231;
 }
 
-.jumbotron {
+.main-container {
 padding-top: 12%;
 padding: 5%;
 text-align: center;
 }
 
-.grim-logo{
+.spin { transition: all 0.8s ease-in-out 0.2s; }
+
+.spin:hover
+{
+    cursor: default;
+    transform: rotate(360deg);
+    transition: all 0.8s ease-in-out 0.2s;
+}
+
+/* ##### Main Html Page ##### */
+/* ##### navbar ###### */
+main{
+
+}
+.app-logo{
+width: 5%;
+margin-right: 5px;
+}
+
+.main-football{
 width: 20%;
+}
+
+footer{
+background-color: #353a40;
+color: #fff;
+}
+
+
+/* ##### Team of the Year ##### */
+.grim-logo{
+width: 25%;
 }
 
 .grim-stadium{
@@ -18,4 +49,14 @@ width: 65%;
 
 .top-padding{
 padding-top: 3rem;
+}
+
+.grim-manager{
+width: 50%;
+border-radius: 15px;
+}
+
+/* ##### Tables ##### */
+.table-border{
+border: solid 2px #c82032;
 }

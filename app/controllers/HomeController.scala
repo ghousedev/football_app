@@ -37,5 +37,9 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   def table() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.table())
   }
+
+  def teamOfTheYear() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.teamOfTheYear())
+  }
 }
 
