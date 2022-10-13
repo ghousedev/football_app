@@ -54,6 +54,7 @@ class PlayerController @Inject() (
       playersData => {
         val id = MurmurHash3.stringHash(playersData.team)
         val newPlayers = models.Player(
+          id,
           Team(
             10L,
             playersData.team,
