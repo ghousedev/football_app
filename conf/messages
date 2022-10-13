@@ -1,2 +1,4 @@
 # https://www.playframework.com/documentation/latest/ScalaI18N
 hello.world=Hello World
+
+format.numeric=Must be a number
