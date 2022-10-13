@@ -1,9 +1,11 @@
 @(stadiumForm: Form[StadiumData])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+@import views.html.helper.CSRF
 
 @main("Create Stadium") {
 <div class="jumbotron">
     <div class="container top-padding">
         @helper.form(action = routes.StadiumController.create()) {
+        @CSRF.formField
         @helper.inputText(stadiumForm("name"))
         @helper.inputText(stadiumForm("city"))
         @helper.inputText(stadiumForm("country"))

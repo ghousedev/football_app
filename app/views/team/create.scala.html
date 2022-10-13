@@ -1,8 +1,10 @@
 @(teamForm: Form[TeamData], stadiumList: List[Stadium])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+@import views.html.helper.CSRF
 
 @main("Create Stadium") {
 <div class="container top-padding">
         @helper.form(action = routes.TeamController.create()) {
+        @CSRF.formField
         @helper.inputText(teamForm("name"))
         @helper.select(
             field = teamForm("Stadium"),
