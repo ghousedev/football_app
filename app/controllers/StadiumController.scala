@@ -15,7 +15,7 @@ case class StadiumData(name: String, city: String, country: String, seats: Int)
 
 class StadiumController @Inject() (
     val controllerComponents: ControllerComponents,
-    @Inject val stadiumService: StadiumService,
+    val stadiumService: StadiumService,
 ) extends BaseController with play.api.i18n.I18nSupport {
   def list() = Action { implicit request =>
     val result = stadiumService.findAll()

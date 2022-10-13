@@ -4,10 +4,10 @@ import services._
 class Module extends AbstractModule {
   override def configure(): Unit = {
     bind(classOf[TeamService])
-      .to(classOf[MemoryTeamService])
+      .to(classOf[MemoryTeamService]).in(classOf[javax.inject.Singleton])
     bind(classOf[PlayerService])
-      .to(classOf[MemoryPlayerService])
+      .to(classOf[MemoryPlayerService]).in(classOf[javax.inject.Singleton])
     bind(classOf[StadiumService])
-      .to(classOf[MemoryStadiumService])
+      .to(classOf[MemoryStadiumService]).in(classOf[javax.inject.Singleton])
   }
 }
