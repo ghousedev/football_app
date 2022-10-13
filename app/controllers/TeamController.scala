@@ -1,31 +1,29 @@
 package controllers
 
 import models.{Stadium, Team}
-import services.MemoryTeamService
-import javax.inject._
 import play.api._
 import play.api.data.Form
-import play.api.data.Forms.{mapping, number, text}
+import play.api.data.Forms.{mapping, text}
 import play.api.mvc._
+import services.{StadiumService, TeamService, MemoryStadiumService}
 
+import javax.inject._
+import scala.util.Random
 import scala.util.hashing.MurmurHash3
 
-case class TeamData(name: String, stadium: String)
+case class TeamData(name: String, stadium: Stadium)
 
 class TeamController @Inject() (
-    val controllerComponents: ControllerComponents
+    val controllerComponents: ControllerComponents,
+    val teamService: TeamService,
+    val stadiumService: StadiumService
 ) extends BaseController with play.api.i18n.I18nSupport {
   def list() = Action { implicit request =>
-    val result = List(
-      Team(13L, "", Stadium(12L, "Emirates Stadium", "A", "B", 0)),
-      Team(13L, "", Stadium(12L, "Emirates Stadium", "A", "B", 0)),
-      Team(13L, "", Stadium(12L, "Emirates Stadium", "A", "B", 0)),
-      Team(13L, "", Stadium(12L, "Emirates Stadium", "A", "B", 0))
-    )
+    val result = teamService.findAll()
     Ok(views.html.team.teams(result))
   }
 
-  val teamForm = Form(
+  val teamForm : Form[TeamData] = Form(
     mapping(
       "name" -> text,
       "stadium" -> text
@@ -45,18 +43,19 @@ class TeamController @Inject() (
       },
       teamData => {
         val id = MurmurHash3.stringHash(teamData.name)
-        val newUser = models.Team(
+        val newTeam = models.Team(
           id,
           teamData.name,
-          Stadium(12L, "Emirates Stadium", "A", "B", 0)
-           )
-        println("Yay!" + newUser)
+          teamData.stadium,
+        )
+        println("Yay!" + newTeam)
+        teamService.create(newTeam)
         Redirect(routes.TeamController.show(id))
       }
     )
   }
 
   def show(id: Long) = Action { implicit request =>
-    Ok("This is placeholder for this team")
-  }
+    val maybeTeam = teamService.findById(id)
+    maybeTeam.map(s => Ok(views.html.team.show(s))).getOrElse(NotFound(s"No team matches id: $id"))  }
 }

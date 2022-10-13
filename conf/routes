@@ -5,7 +5,7 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index()
-#GET     /players                    controllers.HomeController.players()
+#GET    /players                    controllers.HomeController.players()
 GET     /manager                    controllers.HomeController.manager()
 GET     /stadium-info               controllers.HomeController.stadiumInfo()
 GET     /table                      controllers.HomeController.table()
