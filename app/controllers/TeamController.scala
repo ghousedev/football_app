@@ -33,6 +33,7 @@ class TeamController @Inject() (
 
   def init(): Action[AnyContent] = Action { implicit request =>
     val stadList = stadiumService.findAll()
+    println(stadList)
     Ok(views.html.team.create(teamForm, stadList))
   }
 

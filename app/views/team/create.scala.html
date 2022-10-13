@@ -6,7 +6,8 @@
         @helper.inputText(teamForm("name"))
         @helper.select(
             field = teamForm("Stadium"),
-            options = stadiumList.map(s => (s.name, s.id.toString))
+            options = stadiumList.map(s => s.id.toString -> s.name)
+
         )
         <input type="submit" id="submit" value="Submit"/>
     }
