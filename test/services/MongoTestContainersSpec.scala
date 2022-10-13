@@ -19,7 +19,7 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
       val port = container.livenessCheckPortNumbers.head
       println(host)
       println(port)
-      val mongoClient: MongoClient = MongoClient(s"mongodb://localhost:$port")
+      val mongoClient: MongoClient = MongoClient(s"mongodb://$host:$port")
       val myCompanyDatabase = mongoClient.getDatabase("my_company")
       val employeeCollection = myCompanyDatabase.getCollection("employees")
 
@@ -28,7 +28,11 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
 
       employeeCollection
         .insertOne(document)
-        .subscribe(r => println(r), t => t.printStackTrace(), () => println("Done"))
+        .subscribe(
+          r => println(r),
+          t => t.printStackTrace(),
+          () => println("Done")
+        )
 
       Thread.sleep(5000)
 
