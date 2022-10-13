@@ -1,14 +1,10 @@
 package controllers
 
-import models.{Stadium, Team}
-import play.api._
 import play.api.data.Form
-import play.api.data.Forms.{longNumber, mapping, number, text}
+import play.api.data.Forms.{longNumber, mapping, text}
 import play.api.mvc._
-import services.{MemoryStadiumService, StadiumService, TeamService}
-
+import services.{StadiumService, TeamService}
 import javax.inject._
-import scala.util.Random
 import scala.util.hashing.MurmurHash3
 
 case class TeamData(name: String, stadiumId: Long)
@@ -38,7 +34,7 @@ class TeamController @Inject() (
     Ok(views.html.team.create(teamForm, stadList))
   }
 
-  def create() = Action { implicit request =>
+  def create(): Action[AnyContent] = Action { implicit request =>
     teamForm.bindFromRequest.fold(
       formWithErrors => {
         val stadList = stadiumService.findAll()
@@ -57,18 +53,19 @@ class TeamController @Inject() (
             )
           }
           .map { t =>
-            teamService.create(t); t
+            teamService.create(t)
+            t
           }
-          .map(t => Redirect(routes.TeamController.show(id)))
+          .map(t => Redirect(routes.TeamController.show(t.id)))
           .getOrElse(NotFound("Stadium not found"))
       }
     )
   }
 
-  def show(id: Long) = Action { implicit request =>
+  def show(id: Long): Action[AnyContent] = Action { implicit request =>
     val maybeTeam = teamService.findById(id)
     maybeTeam
-      .map(s => Ok(views.html.team.show(s)))
+      .map(t => Ok(views.html.team.show(t)))
       .getOrElse(NotFound(s"No team matches id: $id"))
   }
 }
