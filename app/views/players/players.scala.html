@@ -180,7 +180,7 @@
 
     <ul>
       @for(player <- players) {
-        <li><a href="@routes.PlayerController.show(player.id)">@player.name</a></li>
+        <li><a href="@routes.PlayerController.show(player.id)">@player.firstName</a></li>
       }
     </ul>
   </div>
