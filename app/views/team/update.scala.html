@@ -1,0 +1,17 @@
+@(team: Team, teamForm: Form[TeamData])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+@import views.html.helper.CSRF
+
+@main("Update Team") {
+<div class="container main-container">
+    <br>
+    <h1>Update Team</h1>
+    <div class="container">
+        @helper.form(action = routes.TeamController.show(team.id)) {
+        @CSRF.formField
+        @helper.inputText(teamForm("name"))
+        @helper.inputText(teamForm("stadium"))
+        <input class="btn btn-md btn-danger" type="submit" id="submit" value="Submit"/>
+        }
+    </div>
+</div>
+}
