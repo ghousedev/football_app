@@ -51,7 +51,8 @@ class MongoTeamService
     Document(
       "_id" -> team.id,
       "name" -> team.name,
-      "stadium" -> team.stadium
+      "stadium" -> team.stadium.name,
+
     )
   }
 

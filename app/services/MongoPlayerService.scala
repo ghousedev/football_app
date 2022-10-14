@@ -1,9 +1,11 @@
 package services
 
-import models.{Player, Position, Stadium, Team}
+import models.{GoalKeeper, Player, Position, Stadium, Team}
+import org.mongodb.scala.bson.BsonDocument
 import org.mongodb.scala.connection.ClusterSettings
 import org.mongodb.scala.{Document, MongoClient, MongoClientSettings, MongoCredential, ServerAddress, SingleObservable}
 import org.mongodb.scala.model.Filters.equal
+import services.MemoryTeamService
 
 import scala.concurrent.Future
 import scala.util.Try
@@ -76,10 +78,11 @@ class MongoPlayerService extends AsyncPlayerService {
   private def documentToPlayer(d: Document): Player = {
     Player(
       d.getLong("_id"),
+      documentToTeam(d.get("team").map(b => Document(b.asDocument())).get),
+      d.get("position"), // Must be of child type of Position
       d.getString("firstName"),
-      d.getString("surname"),
-      d.getString("position"),
-      d.getString("team")
+      d.getString("surname")
+
     )
   }
 
@@ -103,5 +106,23 @@ class MongoPlayerService extends AsyncPlayerService {
       .map(documentToPlayer)
       .foldLeft(List[Player]())((acc, player) => player :: acc)
       .head()
+  }
+
+  def documentToTeam(d: Document) = {
+    Team(
+      d.getLong("_id"),
+      d.getString("name"),
+      documentToStadium(d.get("stadium").map(b => Document(b.asDocument())).get)
+    )
+  }
+
+  private def documentToStadium(d: Document) = {
+    Stadium(
+      d.getLong("_id"),
+      d.getString("name"),
+      d.getString("city"),
+      d.getString("country"),
+      d.getInteger("capacity")
+    )
   }
 }
