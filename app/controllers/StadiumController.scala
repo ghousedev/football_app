@@ -8,7 +8,9 @@ import play.api.data.Form
 import play.api.data.Forms.{mapping, number, text}
 import play.api.mvc._
 import services.{AsyncStadiumService, StadiumService}
+
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.util.hashing.MurmurHash3
 
 case class StadiumData(name: String, city: String, country: String, seats: Int)
@@ -36,14 +38,20 @@ class StadiumController @Inject() (
     Ok(views.html.stadium.create(stadiumForm))
   }
 
-  def create() = Action { implicit request =>
+  def create(): Action[AnyContent] = Action.async { implicit request =>
     stadiumForm.bindFromRequest.fold(
-      formWithErrors => {
+      formWithErrors => Future {
         println("Nay!" + formWithErrors)
         BadRequest(views.html.stadium.create(formWithErrors))
       },
-      stadiumData => {
+      stadiumData => Future {
         val id = MurmurHash3.stringHash(stadiumData.name)
+        stadiumService
+          .findById(id)
+          .map {
+            case Some(stadium) => Ok(views.html.stadium.show(stadium))
+            case None => NotFound("Stadium not found")
+          }
         val newStadium = models.Stadium(
           id,
           stadiumData.name,

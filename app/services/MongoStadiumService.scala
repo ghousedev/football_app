@@ -2,6 +2,7 @@ package services
 
 import models.{Player, Position, Stadium}
 import org.mongodb.scala._
+import org.mongodb.scala.bson.collection.immutable.Document.fromSpecific
 import org.mongodb.scala.model.Filters.equal
 
 import javax.inject._
@@ -16,28 +17,17 @@ class MongoStadiumService
   val collection = database.getCollection("stadiums")
 
   override def create(stadium: Stadium): Unit = {
-    val aStadium = Document(
-      "_id" -> stadium.id,
-      "name" -> stadium.name,
-      "country" -> stadium.country,
-      "city" -> stadium.city,
-      "capacity" -> stadium.seats
-    )
+    val aStadium = stadiumToDocument(stadium)
     collection.insertOne(aStadium).subscribe(r => println(s"Successful insert: $r"), t => t.printStackTrace(), () => println("Insert Complete"))
   }
 
-  override def update(stadium: Stadium): Future[Try[Stadium]] = {
-    ???
-//    collection.findOneAndUpdate(
-//      equal("_id", stadium.id),
-//      Stadium(
-//        stadium.id,
-//        stadium.name,
-//        stadium.city,
-//        stadium.country,
-//        stadium.seats
-//      )
-//    )
+  override def update(stadium: Stadium): Future[Option[Stadium]] = {
+    val aStadium = stadiumToDocument(stadium)
+    collection
+      .findOneAndUpdate(equal("_id", stadium.id), aStadium)
+      .map(d => documentToStadium(d))
+      .toSingle()
+      .headOption()
   }
 
   override def findById(id: Long): Future[Option[Stadium]] = {
@@ -55,39 +45,42 @@ class MongoStadiumService
   }.toSingle().headOption()
 
   override def findAll(): Future[List[Stadium]] =
-    collection.find().map{ d =>
-      Stadium(
-      d.getLong("_id"),
-      d.getString("name"),
-      d.getString("city"),
-      d.getString("country"),
-      d.getInteger("seats")
-      )
-    }.foldLeft(List.empty[Stadium])((list, stadium) => stadium :: list).head()
+    collection
+      .find()
+      .map(d => documentToStadium(d))
+      .foldLeft(List.empty[Stadium])((list, stadium) => stadium :: list).head()
 
   override def findByCountry(country: String): Future[List[Stadium]] = {
-    collection.find(equal("country", country)).map { d =>
-      Stadium(
-        d.getLong("_id"),
-        d.getString("name"),
-        d.getString("city"),
-        d.getString("country"),
-        d.getInteger("seats")
-      )
-    }.foldLeft(List.empty[Stadium])((list, stadium) => stadium :: list).head()
+    collection
+      .find(equal("country", country))
+      .map(d => documentToStadium(d))
+      .foldLeft(List.empty[Stadium])((list, stadium) => stadium :: list).head()
   }
 
   override def findByName(name: String): Future[Option[Stadium]] =
     collection
       .find(equal("name", name))
-      .map { d =>
-        Stadium(
-          d.getLong("_id"),
-          d.getString("name"),
-          d.getString("city"),
-          d.getString("country"),
-          d.getInteger("seats")
-        )
-      }.toSingle().headOption()
+      .map(d => documentToStadium(d))
+      .toSingle().headOption()
+
+  private def stadiumToDocument(stadium: Stadium): Document = {
+    Document(
+      "_id" -> stadium.id,
+      "name" -> stadium.name,
+      "country" -> stadium.country,
+      "city" -> stadium.city,
+      "capacity" -> stadium.seats
+    )
+  }
+
+  private def documentToStadium(d: Document) = {
+    Stadium(
+      d.getLong("_id"),
+      d.getString("name"),
+      d.getString("city"),
+      d.getString("country"),
+      d.getInteger("capacity")
+    )
+  }
 }
 
