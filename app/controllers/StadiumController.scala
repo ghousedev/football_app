@@ -1,11 +1,11 @@
 package controllers;
 
 import models.Stadium
-
 import javax.inject._
 import play.api._
 import play.api.data.Form
 import play.api.data.Forms.{mapping, number, text}
+import play.api.data.validation.Constraints._
 import play.api.mvc._
 import services.{AsyncStadiumService, StadiumService}
 
@@ -26,10 +26,10 @@ class StadiumController @Inject() (
 
   val stadiumForm: Form[StadiumData] = Form(
     mapping(
-      "name" -> text,
-      "city" -> text,
-      "country" -> text,
-      "seats" -> number
+      "name" -> text.verifying(nonEmpty),
+      "city" -> text.verifying(nonEmpty),
+      "country" -> text.verifying(nonEmpty),
+      "seats" -> number.verifying(min(0), max(100))
     )(StadiumData.apply) //Construction
     (StadiumData.unapply) //Destructuring
   )
@@ -64,6 +64,25 @@ class StadiumController @Inject() (
         Redirect(routes.StadiumController.show(id))
       }
     )
+  }
+
+  def update(id: Long) = Action.async { implicit request =>
+    stadiumService
+      .findById(id)
+      .map {
+        case Some(stadium) => {
+          val filledForm = stadiumForm.fill(
+            StadiumData(
+              stadium.name,
+              stadium.city,
+              stadium.country,
+              stadium.seats
+            )
+          )
+          Ok(views.html.stadium.update(stadium, filledForm))
+        }
+        case None => NotFound("Stadium not found")
+      }
   }
 
   def show(id: Long): Action[AnyContent] = Action.async { implicit request =>

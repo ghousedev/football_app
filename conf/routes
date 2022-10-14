@@ -23,6 +23,8 @@ GET         /stadium/:id                controllers.StadiumController.show(id:Lo
 
 POST        /stadium                    controllers.StadiumController.create()
 
+GET         /stadium/:id/update         controllers.StadiumController.update(id: Long)
+
 # Player
 GET         /players                    controllers.PlayerController.list()
 

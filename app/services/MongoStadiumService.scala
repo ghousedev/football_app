@@ -33,15 +33,7 @@ class MongoStadiumService
   override def findById(id: Long): Future[Option[Stadium]] = {
     collection
       .find(equal("_id", id))
-      .map(d =>
-        Stadium(
-          d.getLong("_id"),
-          d.getString("name"),
-          d.getString("city"),
-          d.getString("country"),
-          d.getInteger("seats")
-        )
-      )
+      .map(d => documentToStadium(d))
   }.toSingle().headOption()
 
   override def findAll(): Future[List[Stadium]] =
