@@ -1,6 +1,7 @@
 package services
 
 import models.Stadium
+import org.mongodb.scala.Document
 
 import scala.concurrent.Future
 import scala.util.Try
@@ -8,7 +9,7 @@ import scala.util.Try
 trait AsyncStadiumService {
   def create(stadium: Stadium): Unit
 
-  def update(stadium: Stadium): Future[Option[Stadium]]
+  def update(id: Long, doc: Document): Future[Stadium]
 
   def findById(id: Long): Future[Option[Stadium]]
 

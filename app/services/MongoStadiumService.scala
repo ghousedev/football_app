@@ -3,6 +3,7 @@ package services
 import models.{Player, Position, Stadium}
 import org.mongodb.scala._
 import org.mongodb.scala.bson.collection.immutable.Document.fromSpecific
+import org.mongodb.scala.model.Aggregates.set
 import org.mongodb.scala.model.Filters.equal
 
 import javax.inject._
@@ -21,13 +22,19 @@ class MongoStadiumService
     collection.insertOne(aStadium).subscribe(r => println(s"Successful insert: $r"), t => t.printStackTrace(), () => println("Insert Complete"))
   }
 
-  override def update(stadium: Stadium): Future[Option[Stadium]] = {
-    val aStadium = stadiumToDocument(stadium)
+  override def update(id: Long, doc: Document): Future[Stadium] = {
     collection
-      .findOneAndUpdate(equal("_id", stadium.id), aStadium)
+      .findOneAndUpdate(equal("_id", id),
+        set(
+          model.Field("name", doc("name")),
+          model.Field("city", doc("city")),
+          model.Field("country", doc("country")),
+          model.Field("capacity", doc("capacity"))
+        )
+      )
       .map(d => documentToStadium(d))
       .toSingle()
-      .headOption()
+      .head()
   }
 
   override def findById(id: Long): Future[Option[Stadium]] = {

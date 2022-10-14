@@ -1,6 +1,8 @@
 package controllers;
 
 import models.Stadium
+import org.mongodb.scala.Document
+
 import javax.inject._
 import play.api._
 import play.api.data.Form
@@ -29,7 +31,7 @@ class StadiumController @Inject() (
       "name" -> text.verifying(nonEmpty),
       "city" -> text.verifying(nonEmpty),
       "country" -> text.verifying(nonEmpty),
-      "seats" -> number.verifying(min(0), max(100))
+      "seats" -> number.verifying(min(0), max(300000))
     )(StadiumData.apply) //Construction
     (StadiumData.unapply) //Destructuring
   )
@@ -40,33 +42,35 @@ class StadiumController @Inject() (
 
   def create(): Action[AnyContent] = Action.async { implicit request =>
     stadiumForm.bindFromRequest.fold(
-      formWithErrors => Future {
-        println("Nay!" + formWithErrors)
-        BadRequest(views.html.stadium.create(formWithErrors))
-      },
-      stadiumData => Future {
-        val id = MurmurHash3.stringHash(stadiumData.name)
-        stadiumService
-          .findById(id)
-          .map {
-            case Some(stadium) => Ok(views.html.stadium.show(stadium))
-            case None => NotFound("Stadium not found")
-          }
-        val newStadium = models.Stadium(
-          id,
-          stadiumData.name,
-          stadiumData.city,
-          stadiumData.country,
-          stadiumData.seats
-        )
-        println("Yay!" + newStadium)
-        stadiumService.create(newStadium)
-        Redirect(routes.StadiumController.show(id))
-      }
+      formWithErrors =>
+        Future {
+          println("Nay!" + formWithErrors)
+          BadRequest(views.html.stadium.create(formWithErrors))
+        },
+      stadiumData =>
+        Future {
+          val id = MurmurHash3.stringHash(stadiumData.name)
+          stadiumService
+            .findById(id)
+            .map {
+              case Some(stadium) => Ok(views.html.stadium.show(stadium))
+              case None          => NotFound("Stadium not found")
+            }
+          val newStadium = models.Stadium(
+            id,
+            stadiumData.name,
+            stadiumData.city,
+            stadiumData.country,
+            stadiumData.seats
+          )
+          println("Yay!" + newStadium)
+          stadiumService.create(newStadium)
+          Redirect(routes.StadiumController.show(id))
+        }
     )
   }
 
-  def update(id: Long) = Action.async { implicit request =>
+  def edit(id: Long) = Action.async { implicit request =>
     stadiumService
       .findById(id)
       .map {
@@ -79,10 +83,39 @@ class StadiumController @Inject() (
               stadium.seats
             )
           )
-          Ok(views.html.stadium.update(stadium, filledForm))
+          Ok(views.html.stadium.update(filledForm))
         }
         case None => NotFound("Stadium not found")
       }
+  }
+
+  def update() = Action.async { implicit request =>
+    stadiumForm.bindFromRequest.fold(
+      formWithErrors =>
+        Future {
+          println("Nay!" + formWithErrors)
+          BadRequest(views.html.stadium.create(formWithErrors))
+        },
+      stadiumData => {
+        val id = MurmurHash3.stringHash(stadiumData.name)
+        //          stadiumService
+        //            .findById(id)
+        //            .map {
+        //              case Some(stadium) => Ok(views.html.stadium.show(stadium))
+        //              case None => NotFound("Stadium not found")
+        //            }
+        val newStadium = Document(
+          "name" -> stadiumData.name,
+          "city" -> stadiumData.city,
+          "country" ->stadiumData.country,
+          "capacity" -> stadiumData.seats
+        )
+        println("Yay!" + newStadium)
+        stadiumService
+          .update(id, newStadium)
+          .map(s => Redirect(routes.StadiumController.show(s.id)))
+      }
+    )
   }
 
   def show(id: Long): Action[AnyContent] = Action.async { implicit request =>
