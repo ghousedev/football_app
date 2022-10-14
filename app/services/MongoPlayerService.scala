@@ -1,6 +1,6 @@
 package services
 
-import models.{GoalKeeper, Player, Position, Stadium, Team}
+import models.{AttackingMidfielder, CenterBack, Central, GoalKeeper, HoldingMidfielder, LeftFullback, Player, Position, RightFullback, Stadium, Striker, Sweeper, Team}
 import org.mongodb.scala.bson.BsonDocument
 import org.mongodb.scala.connection.ClusterSettings
 import org.mongodb.scala.{Document, MongoClient, MongoClientSettings, MongoCredential, ServerAddress, SingleObservable}
@@ -79,7 +79,7 @@ class MongoPlayerService extends AsyncPlayerService {
     Player(
       d.getLong("_id"),
       documentToTeam(d.get("team").map(b => Document(b.asDocument())).get),
-      d.get("position"), // Must be of child type of Position
+      documentToPosition(d.get("position").map(b => Document(b.asDocument())).get),
       d.getString("firstName"),
       d.getString("surname")
 
@@ -100,15 +100,25 @@ class MongoPlayerService extends AsyncPlayerService {
       .toSingle()
       .headOption()
   }
-  override def findByPosition(position: Position): Future[List[Player]] = {
-    playerCollection
-      .find(equal("position", position.toString))
-      .map(documentToPlayer)
-      .foldLeft(List[Player]())((acc, player) => player :: acc)
-      .head()
+  override def findByPosition(position: Position): Future[List[Player]] = ???
+
+  private def documentToPosition(d: Document) = {
+    d.getString("position") match {
+      case "GoalKeeper" => GoalKeeper
+      case "RightFullback" => RightFullback
+      case "LeftFullback" => LeftFullback
+      case "CenterBack" => CenterBack
+      case "Sweeper" => Sweeper
+      case "Striker" => Striker
+      case "HoldingMidfielder" => HoldingMidfielder
+      case "RightMidfielder" => RightFullback
+      case "Central" => Central
+      case "AttackingMidfielder" => AttackingMidfielder
+      case "LeftMidfielder" => LeftFullback
+    }
   }
 
-  def documentToTeam(d: Document) = {
+  private def documentToTeam(d: Document) = {
     Team(
       d.getLong("_id"),
       d.getString("name"),
