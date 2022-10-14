@@ -35,6 +35,7 @@ class Module extends AbstractModule {
       db.getCollection("players")
     }
 
+
 //    bind(classOf[TeamService])
 //      .to(classOf[MemoryTeamService]).in(classOf[javax.inject.Singleton])
 //    bind(classOf[PlayerService])
