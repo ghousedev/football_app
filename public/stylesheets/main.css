@@ -21,7 +21,7 @@ text-align: center;
 /* ##### Main Html Page ##### */
 /* ##### navbar ###### */
 main{
-
+padding-bottom: 5%;
 }
 .app-logo{
 width: 5%;
@@ -33,6 +33,9 @@ width: 20%;
 }
 
 footer{
+position: fixed;
+width: 100%;
+bottom: 0;
 background-color: #353a40;
 color: #fff;
 }
