@@ -1,6 +1,6 @@
 package services
 
-import models.Team
+import models.{Stadium, Team}
 import org.mongodb.scala._
 import org.mongodb.scala.model.Filters.equal
 
@@ -51,8 +51,7 @@ class MongoTeamService
     Document(
       "_id" -> team.id,
       "name" -> team.name,
-      "stadium" -> team.stadium.name,
-
+      "stadium" -> team.stadium.id,
     )
   }
 
@@ -60,7 +59,17 @@ class MongoTeamService
     Team(
       d.getLong("_id"),
       d.getString("name"),
-      d.get("stadium")
+      documentToStadium(d.get("stadium").map(b => Document(b.asDocument())).get)
+    )
+  }
+
+  private def documentToStadium(d: Document) = {
+    Stadium(
+      d.getLong("_id"),
+      d.getString("name"),
+      d.getString("city"),
+      d.getString("country"),
+      d.getInteger("capacity")
     )
   }
 
