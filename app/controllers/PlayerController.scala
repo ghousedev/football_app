@@ -12,6 +12,10 @@ import scala.util.Random
 import scala.util.hashing.MurmurHash3
 
 import services.PlayerService
+import services.AsyncPlayerService
+
+import javax.inject._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 case class PlayerData(
     team: String,
@@ -22,13 +26,12 @@ case class PlayerData(
 
 class PlayerController @Inject() (
     val controllerComponents: ControllerComponents,
-    val playerService: PlayerService
+    val playerService: AsyncPlayerService
 ) extends BaseController
     with play.api.i18n.I18nSupport {
 
-  def list() = Action { implicit request =>
-    val result = playerService.findAll()
-    Ok(views.html.players.players(result))
+  def list() = Action.async { implicit request =>
+    playerService.findAll().map(xs => Ok(views.html.players.players(xs)))
   }
 
   val playersForm = Form(
@@ -84,10 +87,10 @@ class PlayerController @Inject() (
     )
   }
 
-  def show(id: Long) = Action { implicit request =>
-    val maybePlayers = playerService.findById(id)
-    maybePlayers
-      .map(s => Ok(views.html.players.show(s)))
-      .getOrElse(NotFound("Sorry, that player is not found"))
+  def show(id: Long) = Action.async { implicit request =>
+    playerService.findById(id).map {
+      case Some(player) => Ok(views.html.players.show(player))
+      case None => NotFound("Player not found")
+    }
   }
 }

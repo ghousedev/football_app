@@ -11,5 +11,7 @@ class Module extends AbstractModule {
       .to(classOf[MemoryStadiumService]).in(classOf[javax.inject.Singleton])
     bind(classOf[AsyncStadiumService])
       .to(classOf[MongoStadiumService]).in(classOf[javax.inject.Singleton])
+    bind(classOf[AsyncPlayerService])
+      .to(classOf[MongoPlayerService]).in(classOf[javax.inject.Singleton])
   }
 }
