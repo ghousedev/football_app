@@ -41,4 +41,8 @@ GET         /team                       controllers.TeamController.init()
 
 GET         /team/:id                   controllers.TeamController.show(id:Long)
 
+GET         /team/:id/update            controllers.TeamController.update(id: Long)
+
 POST        /team                       controllers.TeamController.create()
+
+
