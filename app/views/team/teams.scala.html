@@ -1,5 +1,6 @@
 @(teams: List[Team])
 
+@main("Teams") {
 <h1>Welcome, there are @teams.size teams to look at!</h1>
 
 <ul>
@@ -7,3 +8,4 @@
     <li>@team.name</li>
     }
 </ul>
+}

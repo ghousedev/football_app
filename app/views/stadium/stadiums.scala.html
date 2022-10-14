@@ -1,10 +1,31 @@
 @(stadiums: List[Stadium])
-<div class="container top-padding">
+<div class="container main-container top-padding">
 <h1>Welcome, there are @stadiums.size stadiums to look at!</h1>
-
-<ul>
-    @for(stadium <- stadiums) {
-    <li><a href="/stadium/@stadium.id">@stadium.name</a></li>
-    }
-</ul>
 </div>
+@main("Stadiums") {
+
+    @for(stadium <- stadiums) {
+
+        <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                    <img src="@routes.Assets.versioned("images/grim-stadium.jpeg")" alt="Stadium">
+                    <div class="card-body">
+                        <h5 class="card-title">Name: @stadium.name</h5>
+                        <p class="card-text">City: @stadium.city</p>
+                        <p class="card-text">Number of seat: @stadium.seats</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="/stadium/@stadium.id">
+                                    <button type="button" class="btn btn-sm btn-danger">View</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    }
+}
