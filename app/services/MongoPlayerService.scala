@@ -45,15 +45,9 @@ class MongoPlayerService extends AsyncPlayerService {
       "firstName" -> player.firstName,
       "surname" -> player.surname,
       "position" -> player.position.toString,
-      "team" -> Document(
-        "_id" -> player.team.id,
-        "name" -> player.team.name,
-        "stadium" -> Document(
-            "_id" -> player.team.stadium.id,
-            "name" -> player.team.stadium.name,
-            "country" -> player.team.stadium.country,
-            "city" -> player.team.stadium.city,
-            "capacity" -> player.team.stadium.seats))
+      "team" -> player.team.id,
+      "stadium" -> player.team.stadium,
+
     )
   }
 
@@ -116,11 +110,11 @@ class MongoPlayerService extends AsyncPlayerService {
       .head()
   }
 
-  def documentToTeam(d: Document) = {
+  def documentToTeam(d: Document): Team = {
     Team(
       d.getLong("_id"),
       d.getString("name"),
-      documentToStadium(d.get("stadium").map(b => Document(b.asDocument())).get)
+      d.getLong("stadium")
     )
   }
 

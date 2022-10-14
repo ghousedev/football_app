@@ -4,12 +4,10 @@ import org.mongodb.scala.Document
 import play.api.data.Form
 import play.api.data.Forms.{longNumber, mapping, text}
 import play.api.mvc._
-import services.{AsyncStadiumService, AsyncTeamService, StadiumService, TeamService}
-
+import services.{AsyncStadiumService, AsyncTeamService}
 import javax.inject._
 import scala.util.hashing.MurmurHash3
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 case class TeamData(name: String, stadiumId: Long)
 
@@ -50,7 +48,7 @@ class TeamController @Inject() (
               id,
               teamData.name,
               s match {
-                case Some(stadium) => stadium
+                case Some(stadium) => stadium.id
               }
             )
           }
@@ -72,7 +70,7 @@ class TeamController @Inject() (
           val filledForm = teamForm.fill(
             TeamData(
               team.name,
-              team.stadium.id
+              team.stadium
             )
           )
           Ok(views.html.team.update(team, filledForm))

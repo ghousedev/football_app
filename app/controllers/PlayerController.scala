@@ -3,19 +3,17 @@ package controllers;
 import models._
 
 import javax.inject._
-import play.api._
 import play.api.data.Form
 import play.api.data.Forms.{mapping, text}
 import play.api.mvc._
 
-import scala.util.Random
 import scala.util.hashing.MurmurHash3
+import services.{AsyncPlayerService, AsyncStadiumService, AsyncTeamService}
 
-import services.PlayerService
-import services.AsyncPlayerService
-
-import javax.inject._
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{Await, CanAwait, Future}
+import scala.concurrent.duration.Duration
+
 
 case class PlayerData(
     team: String,
@@ -26,10 +24,13 @@ case class PlayerData(
 
 class PlayerController @Inject() (
     val controllerComponents: ControllerComponents,
-    val playerService: AsyncPlayerService
+    val playerService: AsyncPlayerService,
+    val teamService: AsyncTeamService,
+    val stadiumService: AsyncStadiumService
 ) extends BaseController
     with play.api.i18n.I18nSupport {
 
+  implicit val permit: CanAwait = ???
   def list() = Action.async { implicit request =>
     playerService.findAll().map(xs => Ok(views.html.players.players(xs)))
   }
@@ -48,41 +49,46 @@ class PlayerController @Inject() (
     Ok(views.html.players.create(playersForm))
   }
 
-  def create() = Action { implicit request =>
+  def create() = Action.async { implicit request =>
     playersForm.bindFromRequest.fold(
       formWithErrors => {
-        println("Nay!" + formWithErrors)
-        BadRequest(views.html.players.create(formWithErrors))
+        Future {
+          println("Nay!" + formWithErrors)
+          BadRequest(views.html.players.create(formWithErrors))
+        }
       },
       playersData => {
-        val id = MurmurHash3.stringHash(playersData.team)
-        val newPlayers = models.Player(
-          id,
-          Team(
-            10L,
-            playersData.team,
-            Stadium(Random.nextLong(), "", "", "", 0)
-          ),
-          playersData.position match {
-            case "GoalKeeper"          => GoalKeeper
-            case "RightFullback"       => RightFullback
-            case "LeftFullback"        => LeftFullback
-            case "CenterBack"          => CenterBack
-            case "Sweeper"             => Sweeper
-            case "Striker"             => Striker
-            case "HoldingMidfielder"   => HoldingMidfielder
-            case "RightMidfielder"     => RightMidfielder
-            case "Central"             => Central
-            case "AttackingMidfielder" => AttackingMidfielder
-            case "LeftMidfielder"      => LeftMidfielder
-            case _                     => GoalKeeper
-          },
-          "",
-          ""
-        )
-        println("Yay!" + newPlayers)
-        playerService.create(newPlayers)
-        Redirect(routes.PlayerController.show(id))
+        Future {
+          val id = MurmurHash3.stringHash(
+            playersData.firstName + playersData.surname + playersData.position
+          )
+          val maybeTeam = teamService.findByName(playersData.team)
+          val newPlayers = Player(
+            id,
+            maybeTeam.map {
+              case Some(team) => team
+            },
+            playersData.position match {
+              case "GoalKeeper" => GoalKeeper
+              case "RightFullback" => RightFullback
+              case "LeftFullback" => LeftFullback
+              case "CenterBack" => CenterBack
+              case "Sweeper" => Sweeper
+              case "Striker" => Striker
+              case "HoldingMidfielder" => HoldingMidfielder
+              case "RightMidfielder" => RightMidfielder
+              case "Central" => Central
+              case "AttackingMidfielder" => AttackingMidfielder
+              case "LeftMidfielder" => LeftMidfielder
+              case _ => GoalKeeper
+            },
+            playersData.firstName,
+            playersData.surname
+          )
+          println("Yay!" + newPlayers)
+          playerService.create(newPlayers)
+          Redirect(routes.PlayerController.show(id))
+        }
       }
     )
   }
@@ -90,7 +96,7 @@ class PlayerController @Inject() (
   def show(id: Long) = Action.async { implicit request =>
     playerService.findById(id).map {
       case Some(player) => Ok(views.html.players.show(player))
-      case None => NotFound("Player not found")
+      case None         => NotFound("Player not found")
     }
   }
 }
