@@ -12,6 +12,7 @@ class MongoTeamService extends AsyncTeamService {
     MongoClient("mongodb://mongo-root:mongo-password@localhost:27017")
       .getDatabase("football_app")
   val collection = database.getCollection("teams")
+  val stadiumCollection = database.getCollection("stadiums")
 
   override def create(team: Team): Unit = {
     val aTeam = teamToDocument(team)
@@ -57,17 +58,17 @@ class MongoTeamService extends AsyncTeamService {
     Document(
       "_id" -> team.id,
       "name" -> team.name,
-      "stadium" -> team.stadium
+      "stadium" -> team.stadiumId
     )
   }
 
   private def documentToTeam(d: Document) = {
+    println(d)
     Team(
       d.getLong("_id"),
       d.getString("name"),
       d.getLong("stadium")
     )
-
   }
 
   private def documentToStadium(d: Document) = {

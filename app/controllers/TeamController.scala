@@ -70,7 +70,7 @@ class TeamController @Inject() (
           val filledForm = teamForm.fill(
             TeamData(
               team.name,
-              team.stadium
+              team.stadiumId
             )
           )
           Ok(views.html.team.update(team, filledForm))
