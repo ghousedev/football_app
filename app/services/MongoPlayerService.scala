@@ -7,7 +7,9 @@ import org.mongodb.scala.{Document, MongoClient, MongoClientSettings, MongoCrede
 import org.mongodb.scala.model.Filters.equal
 import services.MemoryTeamService
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.duration.Duration
 import scala.util.Try
 
 class MongoPlayerService extends AsyncPlayerService {
@@ -16,6 +18,8 @@ class MongoPlayerService extends AsyncPlayerService {
   )
   val myCompanyDatabase = mongoClient.getDatabase("football_app")
   val playerCollection = myCompanyDatabase.getCollection("players")
+  val teamCollection = myCompanyDatabase.getCollection("teams")
+  val stadiumCollection = myCompanyDatabase.getCollection("stadiums")
 
   override def findById(id: Long): Future[Option[Player]] = {
     playerCollection
@@ -39,15 +43,24 @@ class MongoPlayerService extends AsyncPlayerService {
       )
   }
 
-  private def playerToDocument(player: Player) = {
+  private def getStadiumId(player: Player): Long = {
+    var result = 0L
+    teamCollection.find(equal("_id", player.teamId))
+      .map(d => d.getLong("stadium")).toSingle()
+      .headOption().map{
+      case Some(value) => value
+    }.foreach(t => result = t)
+    result
+  }
+
+  private def playerToDocument(player: Player): Document = {
     Document(
       "_id" -> player.id,
       "firstName" -> player.firstName,
       "surname" -> player.surname,
       "position" -> player.position.toString,
-      "team" -> player.team.id,
-      "stadium" -> player.team.stadium,
-
+      "team" -> player.teamId,
+      //"stadium" -> stadiumCollection.find(equal("_id", getStadiumId(player))).map(d => d.get("_id")),
     )
   }
 
@@ -60,7 +73,7 @@ class MongoPlayerService extends AsyncPlayerService {
             "firstName" -> player.firstName,
             "surname" -> player.surname,
             "position" -> player.position.toString,
-            "team" -> player.team.toString
+            "team" -> player.teamId
           )
         )
       )
@@ -80,7 +93,7 @@ class MongoPlayerService extends AsyncPlayerService {
   private def documentToPlayer(d: Document): Player = {
     Player(
       d.getLong("_id"),
-      documentToTeam(d.get("team").map(b => Document(b.asDocument())).get),
+      10L,
       //d.get("position"), // Must be of child type of Position
       GoalKeeper,
       d.getString("firstName"),

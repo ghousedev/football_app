@@ -1,22 +1,17 @@
 package controllers;
 
 import models._
-
 import javax.inject._
 import play.api.data.Form
-import play.api.data.Forms.{mapping, text}
+import play.api.data.Forms.{longNumber, mapping, text}
 import play.api.mvc._
-
 import scala.util.hashing.MurmurHash3
 import services.{AsyncPlayerService, AsyncStadiumService, AsyncTeamService}
-
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, CanAwait, Future}
-import scala.concurrent.duration.Duration
 
 
 case class PlayerData(
-    team: String,
+    teamId: Long,
     position: String,
     firstName: String,
     surname: String
@@ -30,65 +25,67 @@ class PlayerController @Inject() (
 ) extends BaseController
     with play.api.i18n.I18nSupport {
 
-  implicit val permit: CanAwait = ???
   def list() = Action.async { implicit request =>
     playerService.findAll().map(xs => Ok(views.html.players.players(xs)))
   }
 
   val playersForm = Form(
     mapping(
+      "team" -> longNumber,
       "name" -> text,
       "surname" -> text,
-      "team" -> text,
       "position" -> text
     )(PlayerData.apply) //Construction
     (PlayerData.unapply) //Destructuring
   )
 
-  def init(): Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.players.create(playersForm))
+  def init(): Action[AnyContent] = Action.async { implicit request =>
+    teamService
+      .findAll()
+      .map(xs => Ok(views.html.players.create(playersForm, xs)))
   }
 
   def create() = Action.async { implicit request =>
     playersForm.bindFromRequest.fold(
       formWithErrors => {
-        Future {
-          println("Nay!" + formWithErrors)
-          BadRequest(views.html.players.create(formWithErrors))
-        }
+        println("Nay!" + formWithErrors)
+        teamService
+          .findAll()
+          .map(xs => BadRequest(views.html.players.create(formWithErrors, xs)))
       },
       playersData => {
-        Future {
-          val id = MurmurHash3.stringHash(
-            playersData.firstName + playersData.surname + playersData.position
-          )
-          val maybeTeam = teamService.findByName(playersData.team)
-          val newPlayers = Player(
-            id,
-            maybeTeam.map {
-              case Some(team) => team
-            },
-            playersData.position match {
-              case "GoalKeeper" => GoalKeeper
-              case "RightFullback" => RightFullback
-              case "LeftFullback" => LeftFullback
-              case "CenterBack" => CenterBack
-              case "Sweeper" => Sweeper
-              case "Striker" => Striker
-              case "HoldingMidfielder" => HoldingMidfielder
-              case "RightMidfielder" => RightMidfielder
-              case "Central" => Central
-              case "AttackingMidfielder" => AttackingMidfielder
-              case "LeftMidfielder" => LeftMidfielder
-              case _ => GoalKeeper
-            },
-            playersData.firstName,
-            playersData.surname
-          )
-          println("Yay!" + newPlayers)
-          playerService.create(newPlayers)
-          Redirect(routes.PlayerController.show(id))
-        }
+        val maybeTeam = teamService.findById(playersData.teamId)
+        val id =
+          MurmurHash3.stringHash(playersData.firstName + playersData.surname)
+        maybeTeam
+          .map { t =>
+            Player(
+              id,
+              t match {
+                case Some(t) => t.id
+              },
+              playersData.position match {
+                case "GoalKeeper"          => GoalKeeper
+                case "RightFullback"       => RightFullback
+                case "LeftFullback"        => LeftFullback
+                case "CenterBack"          => CenterBack
+                case "Sweeper"             => Sweeper
+                case "Striker"             => Striker
+                case "HoldingMidfielder"   => HoldingMidfielder
+                case "RightMidfielder"     => RightMidfielder
+                case "Central"             => Central
+                case "AttackingMidfielder" => AttackingMidfielder
+                case "LeftMidfielder"      => LeftMidfielder
+                case _                     => GoalKeeper
+              },
+              playersData.firstName,
+              playersData.surname
+            )
+          }
+          .map { p =>
+            playerService.create(p)
+            Redirect(routes.PlayerController.show(p.id))
+          }
       }
     )
   }
