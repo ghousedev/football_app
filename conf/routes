@@ -25,7 +25,7 @@ POST        /stadium                    controllers.StadiumController.create()
 
 GET         /stadium/:id/update         controllers.StadiumController.edit(id: Long)
 
-POST        /stadium/update         controllers.StadiumController.update()
+POST        /stadium/update             controllers.StadiumController.update()
 
 # Player
 GET         /players                    controllers.PlayerController.list()
@@ -41,10 +41,13 @@ GET         /teams                      controllers.TeamController.list()
 
 GET         /team                       controllers.TeamController.init()
 
-GET         /team/:id                   controllers.TeamController.show(id:Long)
-
-#GET         /team/:id/update            controllers.TeamController.update(id: Long)
+GET         /team/:id                   controllers.TeamController.show(id: Long)
 
 POST        /team                       controllers.TeamController.create()
+
+GET         /team/:id/update            controllers.TeamController.edit(id: Long)
+
+POST        /team/update                controllers.TeamController.update()
+
 
 

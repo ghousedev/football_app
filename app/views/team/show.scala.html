@@ -2,6 +2,21 @@
 
 @main("View Team") {
 <div class="container top-padding">
-  Name: @team.name
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card mb-4 box-shadow">
+        <div class="card-body">
+          <h5 class="card-title">Name: @team.name</h5>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <a href="@routes.TeamController.edit(team.id)">
+                <button type="button" class="btn btn-sm btn-danger">Edit</button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 }

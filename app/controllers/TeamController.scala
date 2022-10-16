@@ -37,7 +37,9 @@ class TeamController @Inject() (
     teamForm.bindFromRequest.fold(
       formWithErrors => {
         println("Nay!" + formWithErrors)
-        stadiumService.findAll().map(xs => BadRequest(views.html.team.create(formWithErrors, xs)))
+        stadiumService
+          .findAll()
+          .map(xs => BadRequest(views.html.team.create(formWithErrors, xs)))
       },
       teamData => {
         val maybeStadium = stadiumService.findById(teamData.stadiumId)
@@ -56,8 +58,8 @@ class TeamController @Inject() (
             teamService.create(t)
             Redirect(routes.TeamController.show(t.id))
           }
-          //.map(t => Redirect(routes.TeamController.show(t.id)))
-          //.getOrElse(NotFound("Stadium not found"))
+        //.map(t => Redirect(routes.TeamController.show(t.id)))
+        //.getOrElse(NotFound("Stadium not found"))
       }
     )
   }
@@ -83,18 +85,28 @@ class TeamController @Inject() (
     teamForm.bindFromRequest.fold(
       formWithErrors => {
         println("Nay!" + formWithErrors)
-        stadiumService.findAll().map(xs => BadRequest(views.html.team.create(formWithErrors, xs)))
+        stadiumService
+          .findAll()
+          .map(xs => BadRequest(views.html.team.create(formWithErrors, xs)))
       },
       teamData => {
         val id = MurmurHash3.stringHash(teamData.name)
-        val newStadium = Document(
-          "name" -> teamData.name,
-          "stadium" -> teamData.stadiumId
-        )
-        println("Yay!" + newStadium)
+        var newTeam = Document()
+        val maybeStadium = stadiumService.findById(teamData.stadiumId)
+        val stadiumName = maybeStadium.map {
+          case Some(stadium) => stadium.name
+          case None          => "Not found"
+        }
+        stadiumName.map { s =>
+          newTeam = Document(
+            "name" -> teamData.name,
+            "stadium" -> s
+          )
+        }
+        println("Yay!" + newTeam)
         stadiumService
-          .update(id, newStadium)
-          .map(s => Redirect(routes.StadiumController.show(s.id)))
+          .update(id, newTeam)
+          .map(s => Redirect(routes.TeamController.show(s.id)))
       }
     )
   }
@@ -102,9 +114,9 @@ class TeamController @Inject() (
   def show(id: Long): Action[AnyContent] = Action.async { implicit request =>
     teamService
       .findById(id)
-      .map{
+      .map {
         case Some(team) => Ok(views.html.team.show(team.id, team))
-        case None => NotFound("Team not found")
+        case None       => NotFound("Team not found")
       }
   }
 }
