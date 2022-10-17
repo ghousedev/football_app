@@ -17,31 +17,6 @@ class Module extends AbstractModule {
       database
     }
 
-    @Provides
-    @Named("stadiumCollection")
-    def stadiumCollectionProvider(db: MongoDatabase) = {
-      db.getCollection("stadiums")
-    }
-
-    @Provides
-    @Named("teamCollection")
-    def teamCollectionProvider(db: MongoDatabase) = {
-      db.getCollection("teams")
-    }
-
-    @Provides
-    @Named("playerCollection")
-    def playerCollectionProvider(db: MongoDatabase) = {
-      db.getCollection("players")
-    }
-
-
-//    bind(classOf[TeamService])
-//      .to(classOf[MemoryTeamService]).in(classOf[javax.inject.Singleton])
-//    bind(classOf[PlayerService])
-//      .to(classOf[MemoryPlayerService]).in(classOf[javax.inject.Singleton])
-//    bind(classOf[StadiumService])
-//      .to(classOf[MemoryStadiumService]).in(classOf[javax.inject.Singleton])
     bind(classOf[AsyncStadiumService])
       .to(classOf[MongoStadiumService]).in(classOf[javax.inject.Singleton])
     bind(classOf[AsyncPlayerService])
