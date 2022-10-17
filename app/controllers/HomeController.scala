@@ -26,10 +26,6 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 //    Ok(views.html.players.players())
 //  }
 
-  def manager() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.manager())
-  }
-
   def stadiumInfo() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.stadiumInfo())
   }
@@ -39,7 +35,15 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
 
   def teamOfTheYear() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.teamOfTheYear())
+    Ok(views.html.teamOfTheYear.teamOfTheYear())
+  }
+
+  def teamOfTheYearManager() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.teamOfTheYear.teamOfTheYearManager())
+  }
+
+  def teamOfTheYearPlayers() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.teamOfTheYear.teamOfTheYearPlayers())
   }
 }
 
