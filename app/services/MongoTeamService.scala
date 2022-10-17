@@ -1,5 +1,6 @@
 package services
 
+import com.google.inject.Inject
 import models.{Stadium, Team}
 import org.mongodb.scala._
 import org.mongodb.scala.model.Filters.equal
@@ -7,12 +8,10 @@ import org.mongodb.scala.model.Filters.equal
 import javax.inject._
 import scala.concurrent.Future
 
-class MongoTeamService extends AsyncTeamService {
-  val database =
-    MongoClient("mongodb://mongo-root:mongo-password@localhost:27017")
-      .getDatabase("football_app")
-  val collection = database.getCollection("teams")
-  val stadiumCollection = database.getCollection("stadiums")
+class MongoTeamService @Inject() (mongoDatabase: MongoDatabase) extends AsyncTeamService {
+
+  val collection = mongoDatabase.getCollection("teams")
+  val stadiumCollection = mongoDatabase.getCollection("stadiums")
 
   override def create(team: Team): Unit = {
     val aTeam = teamToDocument(team)

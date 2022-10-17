@@ -1,9 +1,10 @@
 package services
 
+import com.google.inject.Inject
 import models.{GoalKeeper, Player, Position, Stadium, Team}
 import org.mongodb.scala.bson.BsonDocument
 import org.mongodb.scala.connection.ClusterSettings
-import org.mongodb.scala.{Document, MongoClient, MongoClientSettings, MongoCredential, ServerAddress, SingleObservable}
+import org.mongodb.scala.{Document, MongoClient, MongoClientSettings, MongoCredential, MongoDatabase, ServerAddress, SingleObservable}
 import org.mongodb.scala.model.Filters.equal
 import services.MemoryTeamService
 
@@ -12,14 +13,11 @@ import scala.concurrent.Future
 import scala.concurrent.duration.Duration
 import scala.util.Try
 
-class MongoPlayerService extends AsyncPlayerService {
-  val mongoClient: MongoClient = MongoClient(
-    "mongodb://mongo-root:mongo-password@localhost:27017"
-  )
-  val myCompanyDatabase = mongoClient.getDatabase("football_app")
-  val playerCollection = myCompanyDatabase.getCollection("players")
-  val teamCollection = myCompanyDatabase.getCollection("teams")
-  val stadiumCollection = myCompanyDatabase.getCollection("stadiums")
+class MongoPlayerService @Inject() (mongoDatabase: MongoDatabase) extends AsyncPlayerService {
+
+  val playerCollection = mongoDatabase.getCollection("players")
+  val teamCollection = mongoDatabase.getCollection("teams")
+  val stadiumCollection = mongoDatabase.getCollection("stadiums")
 
   override def findById(id: Long): Future[Option[Player]] = {
     playerCollection

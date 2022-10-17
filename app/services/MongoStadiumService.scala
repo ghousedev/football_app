@@ -13,12 +13,10 @@ import play.api.inject._
 import scala.concurrent.Future
 import scala.util.Try
 
-class MongoStadiumService /*@Inject() (configuration: Configuration, @Named("stadiumCollection") collection: MongoCollection[Document])*/
+class MongoStadiumService @Inject() (mongoDatabase: MongoDatabase)
     extends AsyncStadiumService {
 
-  val database =
-    MongoClient("mongodb://mongo-root:mongo-password@localhost:27017").getDatabase("football_app")
-  val collection = database.getCollection("stadiums")
+  val collection = mongoDatabase.getCollection("stadiums")
 
   override def create(stadium: Stadium): Unit = {
     val aStadium = stadiumToDocument(stadium)
