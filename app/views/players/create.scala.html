@@ -1,33 +1,37 @@
-@(playersForm: Form[PlayerData])
+@(playerForm: Form[PlayerData], teamList: List[Team])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+@import views.html.helper.CSRF
 
 @main("Create Player") {
-<div class="container main-container">
-<br>
-<h1>Create a new Player</h1>
-<form id="create_player" action="/player" method="post" class="top-padding">
-  <label for="name">First Name:</label><input type="text" id="name" name="name" value="@playersForm("name").value"/>
-  <label for="surname">Surname:</label><input type="text" id="surname" name="surname" value="@playersForm("surname").value"/>
-  <label for="surname">Team:</label><input type="text" id="team" name="team" value="@playersForm("team").value"/>
-  <label for="positions">Position:</label>
-  <input list="positions" name="position" value="@playersForm("position").value">
-  <datalist id="positions">
-    <option value="GoalKeeper">
-    <option value="RightFullback">
-    <option value="LeftFullback">
-    <option value="CenterBack">
-    <option value="Sweeper">
-    <option value="Striker">
-    <option value="HoldingMidfielder">
-    <option value="RightMidfielder">
-    <option value="Central">
-    <option value="AttackingMidfielder">
-    <option value="LeftMidfielder">
-  </datalist>
-  <input class="btn btn-md btn-danger" type="submit" id="submit" value="Submit"/>
-</form>
+<div class="container top-padding">
+    <br>
+    <h1>Create a new Player</h1>
+    @helper.form(action = routes.PlayerController.create()) {
+    @CSRF.formField
+    @helper.inputText(playerForm("name"))
+    @helper.inputText(playerForm("surname"))
+    @helper.select(
+    field = playerForm("team"),
+    options = teamList.map(t => t.id.toString -> t.name)
+
+    )
+    @helper.select(
+    field = playerForm("position"),
+    options = List(
+    "GoalKeeper" -> "GoalKeeper",
+    "RightFullback" -> "RightFullback",
+    "LeftFullback" -> "LeftFullback",
+    "CenterBack" -> "CenterBack",
+    "Sweeper" -> "Sweeper",
+    "Striker" -> "Striker",
+    "HoldingMidfielder" -> "HoldingMidfielder",
+    "RightMidfielder" -> "RightMidfielder",
+    "Central" -> "Central",
+    "AttackingMidfielder" -> "AttackingMidfielder",
+    "LeftMidfielder" -> "LeftMidfielder"
+    )
+
+    )
+    <input type="submit" id="submit" value="Submit"/>
+    }
 </div>
 }
-<!--
-<input type="" id="position" name="position" value="@playersForm("position").value"/>
-<input list="positions">
--->

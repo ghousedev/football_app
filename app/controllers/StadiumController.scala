@@ -98,12 +98,6 @@ class StadiumController @Inject() (
         },
       stadiumData => {
         val id = MurmurHash3.stringHash(stadiumData.name)
-        //          stadiumService
-        //            .findById(id)
-        //            .map {
-        //              case Some(stadium) => Ok(views.html.stadium.show(stadium))
-        //              case None => NotFound("Stadium not found")
-        //            }
         val newStadium = Document(
           "name" -> stadiumData.name,
           "city" -> stadiumData.city,

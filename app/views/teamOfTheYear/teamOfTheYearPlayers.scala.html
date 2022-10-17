@@ -1,4 +1,4 @@
-@(players: List[Player])
+@()
 
 @main("Grimsby Town - Players") {
 <div class="container main-container">
@@ -177,11 +177,5 @@
         </div>
       </div>
     </div>
-
-    <ul>
-      @for(player <- players) {
-        <li><a href="@routes.PlayerController.show(player.id)">@player.firstName</a></li>
-      }
-    </ul>
   </div>
   }

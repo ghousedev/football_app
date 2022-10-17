@@ -1,5 +1,3 @@
 package models
 
-case class Player(id: Long, team: Team, position: Position, firstName: String, surname: String) {
-
-}
+case class Player(id: Long, teamId: Long, position: Position, firstName: String, surname: String)

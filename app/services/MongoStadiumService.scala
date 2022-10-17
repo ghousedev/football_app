@@ -1,17 +1,22 @@
 package services
 
+import com.google.inject.Inject
+import com.google.inject.name.Named
 import models.{Player, Position, Stadium}
 import org.mongodb.scala._
 import org.mongodb.scala.bson.collection.immutable.Document.fromSpecific
 import org.mongodb.scala.model.Aggregates.set
 import org.mongodb.scala.model.Filters.equal
+import play.api.Configuration
+import play.api.inject._
 
-import javax.inject._
 import scala.concurrent.Future
 import scala.util.Try
 
-class MongoStadiumService @Inject() (collection: MongoCollection[Document])
+class MongoStadiumService @Inject() (mongoDatabase: MongoDatabase)
     extends AsyncStadiumService {
+
+  val collection = mongoDatabase.getCollection("stadiums")
 
   override def create(stadium: Stadium): Unit = {
     val aStadium = stadiumToDocument(stadium)

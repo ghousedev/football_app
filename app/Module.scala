@@ -1,4 +1,3 @@
-
 import com.google.inject.name.Named
 import com.google.inject.{AbstractModule, Provides}
 import org.mongodb.scala.{MongoClient, MongoDatabase}
@@ -7,7 +6,6 @@ import services._
 
 class Module extends AbstractModule {
   override def configure(): Unit = {
-
     @Provides
     def databaseProvider(configuration: Configuration): MongoDatabase = {
       val user = configuration.get[String]("mongo.username")
@@ -19,23 +17,6 @@ class Module extends AbstractModule {
       database
     }
 
-    @Provides
-    @Named("stadiumCollection")
-    def stadiumCollectionProvider(db: MongoDatabase) = {
-      db.getCollection("stadiums")
-    }
-
-    @Provides
-    @Named("teamCollection")
-    def teamCollectionProvider(db: MongoDatabase) = {
-      db.getCollection("teams")
-    }
-
-    @Provides
-    @Named("playerCollection")
-    def playerCollectionProvider(db: MongoDatabase) = {
-      db.getCollection("players")
-    }
 
     bind(classOf[TeamService])
       .to(classOf[MemoryTeamService]).in(classOf[javax.inject.Singleton])
