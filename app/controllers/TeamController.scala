@@ -1,10 +1,13 @@
 package controllers
 
-import org.mongodb.scala.Document
+import org.mongodb.scala.{Document, MongoDatabase}
+import org.mongodb.scala.model.Aggregates._
+import org.mongodb.scala.model.Filters.equal
 import play.api.data.Form
 import play.api.data.Forms.{longNumber, mapping, text}
 import play.api.mvc._
 import services.{AsyncStadiumService, AsyncTeamService}
+
 import javax.inject._
 import scala.util.hashing.MurmurHash3
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -14,7 +17,8 @@ case class TeamData(name: String, stadiumId: Long)
 class TeamController @Inject() (
     val controllerComponents: ControllerComponents,
     val teamService: AsyncTeamService,
-    val stadiumService: AsyncStadiumService
+    val stadiumService: AsyncStadiumService,
+    mongoDatabase: MongoDatabase
 ) extends BaseController
     with play.api.i18n.I18nSupport {
   def list() = Action.async { implicit request =>
@@ -112,6 +116,9 @@ class TeamController @Inject() (
   }
 
   def show(id: Long): Action[AnyContent] = Action.async { implicit request =>
+    mongoDatabase.getCollection("teams").aggregate(
+      List(lookup("stadiums", "stadium", "_id", "output"), out("temp"))
+    ).subscribe(r => println(s"Successful insert: $r"), t => t.printStackTrace(), () => println("Insert Complete"))
     teamService
       .findById(id)
       .map {
