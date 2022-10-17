@@ -5,7 +5,7 @@ import org.scalatestplus.play.PlaySpec
 class TeamSpec extends PlaySpec {
   "Team" should {
     "have a name" in {
-      val team = Team(20L, "Arsenal", Stadium(1, "Emirates Stadium", "London", "England", 60000))
+      val team = Team(20L, "Arsenal", 10L)
       team.name mustBe "Arsenal"
     }
   }
