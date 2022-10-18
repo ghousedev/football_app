@@ -6,15 +6,18 @@ import services._
 
 class Module extends AbstractModule {
   override def configure(): Unit = {
+
     @Provides
     def databaseProvider(configuration: Configuration): MongoDatabase = {
-      val user = configuration.get[String]("mongo.username")
-      val pass = configuration.get[String]("mongo.password")
-      val dbName = configuration.get[String]("mongo.database")
-      val database = {
-        MongoClient(s"mongodb://$user:$pass@localhost:27017").getDatabase(dbName)
-      }
-      database
+      val username = configuration.get[String]("mongo.username")
+      val password = configuration.get[String]("mongo.password")
+      val database = configuration.get[String]("mongo.database")
+      val url = configuration.get[String]("mongo.host")
+      val port = configuration.get[String]("mongo.port")
+      val mongoClient: MongoClient = MongoClient(
+        s"mongodb://$username:$password@localhost:" + 27017
+      )
+      mongoClient.getDatabase(database)
     }
 
 
