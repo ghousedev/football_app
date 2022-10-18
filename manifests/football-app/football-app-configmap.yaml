@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: football-app-configmap
+  namespace: default
+data:
+  mongo_host: "mongodb"
+  mongo_port: "27017"
