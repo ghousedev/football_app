@@ -74,7 +74,7 @@ class StadiumController @Inject() (
     stadiumService
       .findById(id)
       .map {
-        case Some(stadium) => {
+        case Some(stadium) =>
           val filledForm = stadiumForm.fill(
             StadiumData(
               stadium.name,
@@ -84,7 +84,6 @@ class StadiumController @Inject() (
             )
           )
           Ok(views.html.stadium.update(filledForm))
-        }
         case None => NotFound("Stadium not found")
       }
   }
@@ -101,7 +100,7 @@ class StadiumController @Inject() (
         val newStadium = Document(
           "name" -> stadiumData.name,
           "city" -> stadiumData.city,
-          "country" ->stadiumData.country,
+          "country" -> stadiumData.country,
           "capacity" -> stadiumData.seats
         )
         println("Yay!" + newStadium)
@@ -119,6 +118,5 @@ class StadiumController @Inject() (
         case Some(stadium) => Ok(views.html.stadium.show(stadium))
         case None          => NotFound("Stadium not found")
       }
-  //maybeStadium.map(s => Ok(views.html.stadium.show(s))).getOrElse(NotFound)
   }
 }
