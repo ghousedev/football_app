@@ -117,7 +117,7 @@ class TeamController @Inject() (
 
   def show(id: Long): Action[AnyContent] = Action.async { implicit request =>
     mongoDatabase.getCollection("teams").aggregate(
-      List(lookup("stadiums", "stadium", "_id", "output"), out("temp"))
+      List(lookup("stadiums", "stadium", "_id", "stadiumDetails"), out("temp"))
     ).subscribe(r => println(s"Successful insert: $r"), t => t.printStackTrace(), () => println("Insert Complete"))
     teamService
       .findById(id)
