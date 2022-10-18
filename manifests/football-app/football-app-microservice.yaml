@@ -23,13 +23,13 @@ metadata:
     stack: frontend
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
-  name: mild-temper-ingress
+  name: team-1-football-app-ingress
   namespace: default
 spec:
   rules:
     -   http:
           paths:
-            -   path: /mild-temper(/|$)(.*)
+            -   path: /team-1-football-app(/|$)(.*)
                 pathType: Prefix
                 backend:
                   service:
@@ -84,4 +84,4 @@ spec:
                       name: mongodb
                       key: mongodb-root-password
               -   name: DATABASE_NAME
-                  value: mild-temper-football-app
+                  value: team-1-football-app
