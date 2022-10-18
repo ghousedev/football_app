@@ -63,7 +63,7 @@ class MongoStadiumService @Inject() (mongoDatabase: MongoDatabase)
       .map(d => documentToStadium(d))
       .toSingle().headOption()
 
-  private def stadiumToDocument(stadium: Stadium): Document = {
+  def stadiumToDocument(stadium: Stadium): Document = {
     Document(
       "_id" -> stadium.id,
       "name" -> stadium.name,
