@@ -1,7 +1,7 @@
 name := """football_app"""
 organization := "dev.ghouse"
 
-version := "1.0-SNAPSHOT"
+version := sys.env.getOrElse("BUILD_ID", "0.1")
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
