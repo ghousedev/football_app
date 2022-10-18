@@ -30,7 +30,9 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
 
       val result = teamService
         .findById(11L)
-        .map { case Some(t) => t
+        .map {
+          case Some(t) => t
+          case _ => ()
         }
       result.map(t => t mustEqual team)
     }
@@ -52,8 +54,9 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
 
       stadiumService
         .findById(11L)
-        .map { case Some(s) =>
-          s mustEqual stadium
+        .foreach {
+          case Some(s) => s mustEqual stadium
+          case _ => ()
         }
     }
 
@@ -76,6 +79,7 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
         .map(r =>
           stadiumService.stadiumToDocument(r match {
             case Some(stadium) => stadium
+            case _ => Stadium(0, "", "", "", 0)
           }) mustEqual updatedDocument
         )
     }
@@ -126,9 +130,11 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
       val stadiumService = new MongoStadiumService(db)
       val result = stadiumService
         .findByName("name")
-        .map { case Some(r) => r.name }
-
-      result.map(s => s mustEqual "name")
+        .map {
+          case Some(r) => r.name
+          case _ => ()
+        }
+      result.foreach(s => s mustEqual "name")
     }
 
     "convert a stadium to a document" in {}
