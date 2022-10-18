@@ -4,7 +4,7 @@
 # ~~~~
 
 # An example controller showing a sample home page
-+anyhost
+
 GET     /                           controllers.HomeController.index()
 #GET    /players                    controllers.HomeController.players()
 GET     /stadium-info               controllers.HomeController.stadiumInfo()
