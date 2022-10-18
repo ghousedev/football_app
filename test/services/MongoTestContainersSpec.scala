@@ -1,46 +1,145 @@
 package services
 
-import com.dimafeng.testcontainers.{
-  Container,
-  ForAllTestContainer,
-  MongoDBContainer
-}
+import com.dimafeng.testcontainers.{ForAllTestContainer, MongoDBContainer}
+import models.{Stadium, Team}
+import org.junit.Before
 import org.mongodb.scala._
+import org.mongodb.scala.model.Filters
 import org.scalatestplus.play.PlaySpec
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.util.Success
+
 class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
+
   override val container: MongoDBContainer = new MongoDBContainer()
+  val host: String = container.host
 
-  "MongoDBTeamService" must {
+  "MongoTeamService" must {
 
-    "createATeamDocument" in {
-      println("Did this work?")
-      val host = container.host
-      val port = container.livenessCheckPortNumbers.head
-      println(host)
-      println(port)
-      val mongoClient: MongoClient = MongoClient(s"mongodb://$host:$port")
-      val myCompanyDatabase = mongoClient.getDatabase("my_company")
-      val employeeCollection = myCompanyDatabase.getCollection("employees")
+    "create a team document" in {
+      val db: MongoDatabase = getDb
+      val teamService = new MongoTeamService(db)
+      val team = Team(
+        10L,
+        "name",
+        11L
+      )
+      teamService.create(team)
 
-      val document =
-        Document("_id" -> 30, "firstName" -> "Roy", "lastName" -> "Smith")
-
-      employeeCollection
-        .insertOne(document)
-        .subscribe(
-          r => println(r),
-          t => t.printStackTrace(),
-          () => println("Done")
-        )
-
-      Thread.sleep(5000)
-
-      println("Showing all documents in employees")
-      employeeCollection.find().subscribe(d => println(d))
-      Thread.sleep(20000)
-      val result = 30
-      result mustBe (30)
+      val result = teamService
+        .findById(11L)
+        .map { case Some(t) => t
+        }
+      result.map(t => t mustEqual team)
     }
+  }
+  "MongoStadiumService" must {
+
+    "create a stadium document" in {
+
+      val db: MongoDatabase = getDb
+      val stadiumService = new MongoStadiumService(db)
+      val stadium = Stadium(
+        11L,
+        "name",
+        "city",
+        "country",
+        10
+      )
+      stadiumService.create(stadium)
+
+      stadiumService
+        .findById(11L)
+        .map { case Some(s) =>
+          s mustEqual stadium
+        }
+    }
+
+    "update a stadium document" in {
+      val db: MongoDatabase = getDb
+      val stadiumService = new MongoStadiumService(db)
+
+      val updatedDocument = Document(
+        "_id" -> 10L,
+        "name" -> "name",
+        "city" -> "city",
+        "country" -> "country",
+        "capacity" -> 100
+      )
+
+      stadiumService.update(10L, updatedDocument)
+
+      stadiumService
+        .findById(10L)
+        .map(r =>
+          stadiumService.stadiumToDocument(r match {
+            case Some(stadium) => stadium
+          }) mustEqual updatedDocument
+        )
+    }
+
+    "find a stadium by it's id" in {
+      val db: MongoDatabase = getDb
+      val stadiumService = new MongoStadiumService(db)
+      stadiumService
+        .findById(10L)
+        .map(r =>
+          r mustEqual Document(
+            "_id" -> 10L,
+            "name" -> "name",
+            "city" -> "city",
+            "country" -> "country",
+            "seats" -> 100
+          )
+        )
+    }
+
+    "list all stadiums" in {
+      val db: MongoDatabase = getDb
+      val stadiumService = new MongoStadiumService(db)
+      stadiumService.findAll().map(r => r.size mustEqual 1)
+    }
+
+    "list stadiums by country" in {
+      val db: MongoDatabase = getDb
+      val stadiumService = new MongoStadiumService(db)
+      val stadium = Stadium(
+        12L,
+        "name",
+        "city",
+        "country",
+        10
+      )
+      stadiumService.create(stadium)
+      stadiumService
+        .findByCountry("country")
+        .map(r => {
+          r.size mustEqual 3
+          r.map(s => s.country mustBe "country")
+        })
+    }
+
+    "find a stadium by it's name" in {
+      val db: MongoDatabase = getDb
+      val stadiumService = new MongoStadiumService(db)
+      val result = stadiumService
+        .findByName("name")
+        .map { case Some(r) => r.name }
+
+      result.map(s => s mustEqual "name")
+    }
+
+    "convert a stadium to a document" in {}
+
+    "convert a document to a stadium" in {}
+  }
+
+  private def getDb = {
+    val port: Int = container.livenessCheckPortNumbers.head
+    val mongoClient: MongoClient = MongoClient(s"mongodb://$host:$port")
+    val db = mongoClient.getDatabase("tests")
+    db
   }
 }
