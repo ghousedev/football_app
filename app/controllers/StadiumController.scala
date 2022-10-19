@@ -15,7 +15,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.hashing.MurmurHash3
 
-case class StadiumData(name: String, city: String, country: String, seats: Int)
+case class StadiumData(name: String, city: String, country: String, seats: Int, imgUrl: String)
 
 class StadiumController @Inject() (
     val controllerComponents: ControllerComponents,
@@ -31,8 +31,9 @@ class StadiumController @Inject() (
       "name" -> text.verifying(nonEmpty),
       "city" -> text.verifying(nonEmpty),
       "country" -> text.verifying(nonEmpty),
-      "seats" -> number.verifying(min(0), max(300000))
-    )(StadiumData.apply) //Construction
+      "seats" -> number.verifying(min(0), max(300000)),
+      "imgUrl" -> text.verifying(nonEmpty))
+    (StadiumData.apply) //Construction
     (StadiumData.unapply) //Destructuring
   )
 
@@ -61,7 +62,8 @@ class StadiumController @Inject() (
             stadiumData.name,
             stadiumData.city,
             stadiumData.country,
-            stadiumData.seats
+            stadiumData.seats,
+            stadiumData.imgUrl
           )
           println("Yay!" + newStadium)
           stadiumService.create(newStadium)
@@ -80,7 +82,8 @@ class StadiumController @Inject() (
               stadium.name,
               stadium.city,
               stadium.country,
-              stadium.seats
+              stadium.seats,
+              stadium.imgUrl
             )
           )
           Ok(views.html.stadium.update(filledForm))
@@ -101,7 +104,8 @@ class StadiumController @Inject() (
           "name" -> stadiumData.name,
           "city" -> stadiumData.city,
           "country" -> stadiumData.country,
-          "capacity" -> stadiumData.seats
+          "capacity" -> stadiumData.seats,
+          "imgUrl" -> stadiumData.imgUrl
         )
         println("Yay!" + newStadium)
         stadiumService
