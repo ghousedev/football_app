@@ -45,7 +45,7 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
         "city",
         "country",
         10,
-        "https://tfcstadiums.com/wp-content/uploads/2022/02/18-Emirates-Stadium-Google-Earth-scaled.jpg"
+        "imgUrl"
       )
       stadiumService.create(stadium)
 
@@ -66,7 +66,8 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
         "name" -> "name",
         "city" -> "city",
         "country" -> "country",
-        "capacity" -> 100
+        "capacity" -> 100,
+        "imgUrl" -> "imgUrl"
       )
 
       stadiumService.update(10L, updatedDocument)
