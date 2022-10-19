@@ -9,20 +9,20 @@ class MemoryStadiumServiceSpec extends PlaySpec {
   "MemoryStadiumService" must {
     "return the size of the list after I create the stadium" in {
       val memoryStadiumService = new MemoryStadiumService()
-      val stadium = Stadium(10L, "Emirates Stadium", "London", "England", 60000)
+      val stadium = Stadium(10L, "Emirates Stadium", "London", "England", 60000, "https://tfcstadiums.com/wp-content/uploads/2022/02/18-Emirates-Stadium-Google-Earth-scaled.jpg")
       memoryStadiumService.create(stadium)
       memoryStadiumService.findAll().size mustBe 1
     }
     "find a stadium by an id and return that stadium if it is in there" in {
       val memoryStadiumService = new MemoryStadiumService
-      val stadium = Stadium(10L, "Emirates Stadium", "London", "England", 60000)
+      val stadium = Stadium(10L, "Emirates Stadium", "London", "England", 60000, "https://tfcstadiums.com/wp-content/uploads/2022/02/18-Emirates-Stadium-Google-Earth-scaled.jpg")
       memoryStadiumService.create(stadium)
       val result = memoryStadiumService.findById(stadium.id)
       result mustBe Some(stadium)
     }
     "find a stadium by an id that doesn't exist" in {
       val memoryStadiumService = new MemoryStadiumService
-      val stadium = Stadium(10L, "Emirates Stadium", "London", "England", 60000)
+      val stadium = Stadium(10L, "Emirates Stadium", "London", "England", 60000, "https://tfcstadiums.com/wp-content/uploads/2022/02/18-Emirates-Stadium-Google-Earth-scaled.jpg")
       memoryStadiumService.create(stadium)
       val result = memoryStadiumService.findById(11L)
       result mustBe Option.empty

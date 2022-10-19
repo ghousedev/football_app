@@ -76,7 +76,8 @@ class MongoTeamService @Inject() (mongoDatabase: MongoDatabase) extends AsyncTea
       d.getString("name"),
       d.getString("city"),
       d.getString("country"),
-      d.getInteger("capacity")
+      d.getInteger("capacity"),
+      d.getString("imgUrl")
     )
   }
 }
