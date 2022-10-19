@@ -11,6 +11,8 @@ import services.{AsyncStadiumService, AsyncTeamService}
 import javax.inject._
 import scala.util.hashing.MurmurHash3
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import play.api.http.Writeable
 
 case class TeamData(name: String, stadiumId: Long)
 
@@ -115,15 +117,27 @@ class TeamController @Inject() (
     )
   }
 
-  def show(id: Long): Action[AnyContent] = Action.async { implicit request =>
-    mongoDatabase.getCollection("teams").aggregate(
-      List(lookup("stadiums", "stadium", "_id", "stadiumDetails"), out("temp"))
-    ).subscribe(r => println(s"Successful insert: $r"), t => t.printStackTrace(), () => println("Insert Complete"))
-    teamService
-      .findById(id)
-      .map {
-        case Some(team) => Ok(views.html.team.show(team.id, team))
-        case None       => NotFound("Team not found")
+  def show(id: Long) = Action.async { implicit request =>
+    mongoDatabase
+      .getCollection("teams")
+      .aggregate(
+        List(
+          lookup("stadiums", "stadium", "_id", "stadiumDetails"),
+          out("temp")
+        )
+      )
+      .toSingle()
+      .headOption()
+      .flatMap {
+        case Some(teamInfo) =>
+          teamService
+          .findById(id)
+          .map {
+            case Some(team) => Ok(views.html.team.show(team.id, teamInfo))
+            case None => NotFound("Team not found")
+          }
+        case None => Future(NotFound("Team not found"))
       }
+
   }
 }

@@ -1,17 +1,13 @@
 package services
 
 import com.google.inject.Inject
-import com.google.inject.name.Named
-import models.{Player, Position, Stadium}
+import models.Stadium
 import org.mongodb.scala._
-import org.mongodb.scala.bson.collection.immutable.Document.fromSpecific
 import org.mongodb.scala.model.Aggregates.set
 import org.mongodb.scala.model.Filters.equal
-import play.api.Configuration
 import play.api.inject._
 
 import scala.concurrent.Future
-import scala.util.Try
 
 class MongoStadiumService @Inject() (mongoDatabase: MongoDatabase)
     extends AsyncStadiumService {
@@ -79,7 +75,8 @@ class MongoStadiumService @Inject() (mongoDatabase: MongoDatabase)
       d.getString("name"),
       d.getString("city"),
       d.getString("country"),
-      d.getInteger("capacity")
+      d.getInteger("capacity"),
+      d.getString("imgUrl")
     )
   }
 }

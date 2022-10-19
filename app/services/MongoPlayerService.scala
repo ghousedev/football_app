@@ -1,17 +1,12 @@
 package services
 
 import com.google.inject.Inject
-import models.{GoalKeeper, Player, Position, Stadium, Team}
-import org.mongodb.scala.bson.BsonDocument
-import org.mongodb.scala.connection.ClusterSettings
-import org.mongodb.scala.{Document, MongoClient, MongoClientSettings, MongoCredential, MongoDatabase, ServerAddress, SingleObservable}
+import models._
 import org.mongodb.scala.model.Filters.equal
-import services.MemoryTeamService
+import org.mongodb.scala.{Document, MongoDatabase}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.duration.Duration
-import scala.util.Try
 
 class MongoPlayerService @Inject() (mongoDatabase: MongoDatabase) extends AsyncPlayerService {
 
@@ -135,7 +130,8 @@ class MongoPlayerService @Inject() (mongoDatabase: MongoDatabase) extends AsyncP
       d.getString("name"),
       d.getString("city"),
       d.getString("country"),
-      d.getInteger("capacity")
+      d.getInteger("capacity"),
+      d.getString("imgUrl")
     )
   }
 }

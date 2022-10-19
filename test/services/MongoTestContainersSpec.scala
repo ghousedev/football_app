@@ -2,14 +2,10 @@ package services
 
 import com.dimafeng.testcontainers.{ForAllTestContainer, MongoDBContainer}
 import models.{Stadium, Team}
-import org.junit.Before
 import org.mongodb.scala._
-import org.mongodb.scala.model.Filters
 import org.scalatestplus.play.PlaySpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.util.Success
 
 class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
 
@@ -48,7 +44,8 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
         "name",
         "city",
         "country",
-        10
+        10,
+        "https://tfcstadiums.com/wp-content/uploads/2022/02/18-Emirates-Stadium-Google-Earth-scaled.jpg"
       )
       stadiumService.create(stadium)
 
@@ -79,7 +76,7 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
         .map(r =>
           stadiumService.stadiumToDocument(r match {
             case Some(stadium) => stadium
-            case _ => Stadium(0, "", "", "", 0)
+            case _ => Stadium(0, "", "", "", 0, "")
           }) mustEqual updatedDocument
         )
     }
@@ -95,7 +92,8 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
             "name" -> "name",
             "city" -> "city",
             "country" -> "country",
-            "seats" -> 100
+            "seats" -> 100,
+            "imgUrl" -> "imgUrl"
           )
         )
     }
@@ -114,7 +112,8 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
         "name",
         "city",
         "country",
-        10
+        10,
+        "imgUrl"
       )
       stadiumService.create(stadium)
       stadiumService

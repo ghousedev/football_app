@@ -1,4 +1,6 @@
-@(teamId: Long, team: Team)
+@import org.mongodb.scala.Document
+@(teamId: Long, teamInfo: Document)
+
 
 @main("View Team") {
 <div class="container top-padding">
@@ -6,10 +8,11 @@
     <div class="col-md-4">
       <div class="card mb-4 box-shadow">
         <div class="card-body">
-          <h5 class="card-title">Name: @team.name</h5>
+          <h5 class="card-title">Name: @teamInfo("name").asString.getValue</h5>
+          <h5 class="card-title">Stadium: @teamInfo("stadiumDetails")</h5>
           <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
-              <a href="@routes.TeamController.edit(team.id)">
+              <a href="@routes.TeamController.edit(teamId)">
                 <button type="button" class="btn btn-sm btn-danger">Edit</button>
               </a>
             </div>
