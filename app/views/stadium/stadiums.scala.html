@@ -4,13 +4,12 @@
 </div>
 @main("Stadiums") {
 
-    @for(stadium <- stadiums) {
-
         <div class="container">
         <div class="row">
             <div class="col-md-4">
+                @for(stadium <- stadiums) {
                 <div class="card mb-4 box-shadow">
-                    <img src="@routes.Assets.versioned("images/grim-stadium.jpeg")" alt="Stadium">
+                    <img src="@stadium.imgUrl" alt="@stadium.name">
                     <div class="card-body">
                         <h5 class="card-title">Name: @stadium.name</h5>
                         <p class="card-text">City: @stadium.city</p>
@@ -24,8 +23,9 @@
                         </div>
                     </div>
                 </div>
+                }
             </div>
         </div>
         </div>
-    }
+
 }
