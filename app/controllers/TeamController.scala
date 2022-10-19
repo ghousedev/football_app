@@ -71,7 +71,7 @@ class TeamController @Inject() (
     teamService
       .findById(id)
       .map {
-        case Some(team) => {
+        case Some(team) =>
           val filledForm = teamForm.fill(
             TeamData(
               team.name,
@@ -79,7 +79,6 @@ class TeamController @Inject() (
             )
           )
           Ok(views.html.team.update(team, filledForm))
-        }
         case None => NotFound("Stadium not found")
       }
   }
