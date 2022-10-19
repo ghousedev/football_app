@@ -15,7 +15,7 @@ class Module extends AbstractModule {
       val url = configuration.get[String]("mongo.host")
       val port = configuration.get[String]("mongo.port")
       val mongoClient: MongoClient = MongoClient(
-        s"mongodb://$username:$password@localhost:" + 27017
+        s"mongodb://$username:$password@$url:$port"
       )
       mongoClient.getDatabase(database)
     }
