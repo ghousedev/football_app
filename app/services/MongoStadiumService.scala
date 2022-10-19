@@ -66,7 +66,8 @@ class MongoStadiumService @Inject() (mongoDatabase: MongoDatabase)
       "name" -> stadium.name,
       "country" -> stadium.country,
       "city" -> stadium.city,
-      "capacity" -> stadium.seats
+      "capacity" -> stadium.seats,
+      "imgUrl" -> stadium.imgUrl
     )
   }
 
