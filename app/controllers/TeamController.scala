@@ -2,17 +2,14 @@ package controllers
 
 import org.mongodb.scala.{Document, MongoDatabase}
 import org.mongodb.scala.model.Aggregates._
-import org.mongodb.scala.model.Filters.equal
 import play.api.data.Form
 import play.api.data.Forms.{longNumber, mapping, text}
 import play.api.mvc._
 import services.{AsyncStadiumService, AsyncTeamService}
-
 import javax.inject._
 import scala.util.hashing.MurmurHash3
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import play.api.http.Writeable
 
 case class TeamData(name: String, stadiumId: Long)
 
@@ -131,13 +128,12 @@ class TeamController @Inject() (
       .flatMap {
         case Some(teamInfo) =>
           teamService
-          .findById(id)
-          .map {
-            case Some(team) => Ok(views.html.team.show(team.id, teamInfo))
-            case None => NotFound("Team not found")
-          }
+            .findById(id)
+            .map {
+              case Some(team) => Ok(views.html.team.show(team.id, teamInfo))
+              case None       => NotFound("Team not found")
+            }
         case None => Future(NotFound("Team not found"))
       }
-
   }
 }
