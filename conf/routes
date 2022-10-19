@@ -6,6 +6,7 @@
 # An example controller showing a sample home page
 
 GET     /                           controllers.HomeController.index()
+GET     /team-1-football-app        controllers.HomeController.index()
 #GET    /players                    controllers.HomeController.players()
 GET     /stadium-info               controllers.HomeController.stadiumInfo()
 GET     /table                      controllers.HomeController.table()
