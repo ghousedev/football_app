@@ -2,9 +2,9 @@ package services
 
 import com.google.inject.Inject
 import models.Stadium
-import org.mongodb.scala._
 import org.mongodb.scala.model.Aggregates.set
 import org.mongodb.scala.model.Filters.equal
+import org.mongodb.scala.{model, _}
 import play.api.inject._
 
 import scala.concurrent.Future
@@ -26,7 +26,8 @@ class MongoStadiumService @Inject() (mongoDatabase: MongoDatabase)
           model.Field("name", doc("name")),
           model.Field("city", doc("city")),
           model.Field("country", doc("country")),
-          model.Field("capacity", doc("capacity"))
+          model.Field("capacity", doc("capacity")),
+          model.Field("imgUrl", doc("imgUrl"))
         )
       )
       .map(d => documentToStadium(d))

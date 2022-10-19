@@ -1,0 +1,19 @@
+@(playersForm: Form[PlayerData])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+@import views.html.helper.CSRF
+
+@main("Update Players") {
+<div class="container main-container">
+    <br>
+    <h1>Update Player</h1>
+    <div class="container">
+        @helper.form(action = routes.PlayerController.update()) {
+        @CSRF.formField
+        @helper.inputText(playersForm("team"))
+        @helper.inputText(playersForm("name"))
+        @helper.inputText(playersForm("surname"))
+        @helper.inputText(playersForm("position"))
+        <input class="btn btn-md btn-danger" type="submit" id="submit" value="Submit"/>
+        }
+    </div>
+</div>
+}

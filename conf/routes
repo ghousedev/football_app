@@ -39,6 +39,10 @@ GET         /player/:id                 controllers.PlayerController.show(id:Lon
 
 POST        /player                     controllers.PlayerController.create()
 
+GET         /player/:id/update          controllers.PlayerController.edit(id: Long)
+
+POST        /player/update              controllers.PlayerController.update()
+
 # Team
 GET         /teams                      controllers.TeamController.list()
 
