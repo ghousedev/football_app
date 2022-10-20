@@ -57,17 +57,14 @@ class MongoTeamService @Inject() (mongoDatabase: MongoDatabase) extends AsyncTea
     Document(
       "_id" -> team.id,
       "name" -> team.name,
-      "stadium" -> team.stadiumId
+      "stadium" -> team.stadiumId,
+      "imgUrl" -> team.imgUrl
     )
   }
 
   private def documentToTeam(d: Document) = {
     println(d)
-    Team(
-      d.getLong("_id"),
-      d.getString("name"),
-      d.getLong("stadium")
-    )
+    Team(d.getLong("_id"), d.getString("name"), d.getLong("stadium"), d.getString("imgUrl"))
   }
 
   private def documentToStadium(d: Document) = {

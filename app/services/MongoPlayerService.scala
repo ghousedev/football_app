@@ -117,11 +117,7 @@ class MongoPlayerService @Inject() (mongoDatabase: MongoDatabase) extends AsyncP
   }
 
   def documentToTeam(d: Document): Team = {
-    Team(
-      d.getLong("_id"),
-      d.getString("name"),
-      d.getLong("stadium")
-    )
+    Team(d.getLong("_id"), d.getString("name"), d.getLong("stadium"), d.getString("imgUrl"))
   }
 
   private def documentToStadium(d: Document) = {

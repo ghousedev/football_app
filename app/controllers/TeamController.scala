@@ -15,7 +15,7 @@ import scala.util.hashing.MurmurHash3
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-case class TeamData(name: String, stadiumId: Long)
+case class TeamData(name: String, stadiumId: Long, imgUrl: String)
 
 class TeamController @Inject() (
     val controllerComponents: ControllerComponents,
@@ -32,7 +32,8 @@ class TeamController @Inject() (
   val teamForm: Form[TeamData] = Form(
     mapping(
       "name" -> text,
-      "stadium" -> longNumber
+      "stadium" -> longNumber,
+      "imgUrl" -> text
     )(TeamData.apply) //Construction
     (TeamData.unapply) //Destructuring
   )
@@ -54,13 +55,9 @@ class TeamController @Inject() (
         val id = MurmurHash3.stringHash(teamData.name)
         maybeStadium
           .map { s =>
-            models.Team(
-              id,
-              teamData.name,
-              s match {
+            models.Team(id, teamData.name, s match {
                 case Some(stadium) => stadium.id
-              }
-            )
+              })
           }
           .map { t =>
             teamService.create(t)
@@ -78,10 +75,7 @@ class TeamController @Inject() (
       .map {
         case Some(team) =>
           val filledForm = teamForm.fill(
-            TeamData(
-              team.name,
-              team.stadiumId
-            )
+            TeamData(team.name, team.stadiumId, team.imgUrl)
           )
           Ok(views.html.team.update(team, filledForm))
         case None => NotFound("Stadium not found")
