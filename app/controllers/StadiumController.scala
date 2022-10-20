@@ -1,16 +1,12 @@
 package controllers;
 
-import models.Stadium
 import org.mongodb.scala.Document
-
 import javax.inject._
-import play.api._
 import play.api.data.Form
 import play.api.data.Forms.{mapping, number, text}
 import play.api.data.validation.Constraints._
 import play.api.mvc._
-import services.{AsyncStadiumService, StadiumService}
-
+import services.AsyncStadiumService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.hashing.MurmurHash3
