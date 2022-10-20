@@ -63,3 +63,19 @@ border-radius: 15px;
 .table-border{
 border: solid 2px #c82032;
 }
+
+
+/* ##### Stadiums ##### */
+.card{
+    text-align: center;
+    border: 1px solid #353a40;
+
+}
+.card-header{
+    background-color: #353a40;
+    color: #fff;
+}
+.capacity{
+    font-size: 1.5rem;
+    font-weight: 700;
+}
