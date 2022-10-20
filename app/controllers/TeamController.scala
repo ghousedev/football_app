@@ -116,7 +116,7 @@ class TeamController @Inject() (
           teamService
             .findById(id)
             .map {
-              case Some(team) => Ok(views.html.team.show(team.id, team.imgUrl, team.name, stadium))
+              case Some(team) => Ok(views.html.team.show(team.id, team.name, team.imgUrl, stadium))
               case None       => NotFound("Team not found")
             }
         case None => Future(NotFound("Team not found"))
