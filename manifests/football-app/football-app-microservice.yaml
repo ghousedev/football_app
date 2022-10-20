@@ -22,7 +22,7 @@ metadata:
   labels:
     stack: frontend
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /team-1-football-app/$1$2
+    nginx.ingress.kubernetes.io/rewrite-target: /team-1-football-app$1$2
   name: team-1-football-app-ingress-path
   namespace: default
 spec:

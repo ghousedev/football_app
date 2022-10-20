@@ -1,7 +1,7 @@
 @(teamForm: Form[TeamData], stadiumList: List[Stadium])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
 @import views.html.helper.CSRF
 
-@main("Create Stadium") {
+@main("Create Team") {
 <div class="container top-padding">
         @helper.form(action = routes.TeamController.create()) {
         @CSRF.formField
@@ -11,6 +11,7 @@
             options = stadiumList.map(s => s.id.toString -> s.name)
 
         )
+        @helper.inputText(teamForm("imgUrl"))
         <input type="submit" id="submit" value="Submit"/>
     }
 </div>

@@ -19,10 +19,10 @@
                     <h5 class="card-header">@stadium.name</h5>
                     <img src="@stadium.imgUrl" alt="@stadium.name">
                     <div class="card-body">
-                        <h5 class="card-title">City: Leeds</h5>
+                        <h5 class="card-title">City: @stadium.city</h5>
                         <hr>
                         <p class="card-text">The Capacity of this @stadium.name is: <br> <span class="capacity">@stadium.seats</span> </p>
-                        <a href="#" class="btn btn-sm btn-danger">View Stadium</a>
+                        <a href="@routes.StadiumController.edit(stadium.id)" class="btn btn-sm btn-danger">View Stadium</a>
                     </div>
                 </div>
             </div>

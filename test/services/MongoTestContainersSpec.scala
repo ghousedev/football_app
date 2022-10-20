@@ -17,11 +17,7 @@ class MongoTestContainersSpec extends PlaySpec with ForAllTestContainer {
     "create a team document" in {
       val db: MongoDatabase = getDb
       val teamService = new MongoTeamService(db)
-      val team = Team(
-        10L,
-        "name",
-        11L
-      )
+      val team = Team(10L, "name", 11L)
       teamService.create(team)
 
       val result = teamService
