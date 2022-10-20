@@ -87,6 +87,8 @@ border: solid 2px #c82032;
   background-color: #fff;
   display: flex;
   justify-content: center;
+  margin-top: 8%;
+  margin-bottom: 8%;
 }
 
 .form {
