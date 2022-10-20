@@ -1,11 +1,15 @@
 package controllers
 
+import models.Stadium
 import org.mongodb.scala.{Document, MongoDatabase}
+import org.mongodb.scala.bson._
 import org.mongodb.scala.model.Aggregates._
 import play.api.data.Form
 import play.api.data.Forms.{longNumber, mapping, text}
 import play.api.mvc._
+import play.twirl.api.TwirlHelperImports.twirlJavaCollectionToScala
 import services.{AsyncStadiumService, AsyncTeamService}
+
 import javax.inject._
 import scala.util.hashing.MurmurHash3
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -20,6 +24,7 @@ class TeamController @Inject() (
     mongoDatabase: MongoDatabase
 ) extends BaseController
     with play.api.i18n.I18nSupport {
+
   def list() = Action.async { implicit request =>
     teamService.findAll().map(xs => Ok(views.html.team.teams(xs)))
   }
@@ -126,13 +131,21 @@ class TeamController @Inject() (
       .headOption()
       .flatMap {
         case Some(teamInfo) =>
+          val stadium: Stadium = parseStadiumDoc(teamInfo)
           teamService
             .findById(id)
             .map {
-              case Some(team) => Ok(views.html.team.show(team.id, teamInfo))
+              case Some(team) => Ok(views.html.team.show(team.id, teamInfo, stadium))
               case None       => NotFound("Team not found")
             }
         case None => Future(NotFound("Team not found"))
       }
+  }
+
+  private def parseStadiumDoc(teamInfo: Document) = {
+    val stadiumInfo = teamInfo("stadiumDetails").toString.split(",").toList
+    val stadiumInfoList = stadiumInfo.map(s => s.trim.split(": ").apply(1).replace("\"", ""))
+    val stadium = Stadium(stadiumInfoList.head.toLong, stadiumInfoList(1), stadiumInfoList(2), stadiumInfoList(3), stadiumInfoList(4).toInt)
+    stadium
   }
 }
