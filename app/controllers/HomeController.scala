@@ -26,9 +26,6 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 //    Ok(views.html.players.players())
 //  }
 
-  def stadiumInfo() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.stadiumInfo())
-  }
 
   def table() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.table())

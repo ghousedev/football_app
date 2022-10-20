@@ -119,4 +119,5 @@ class StadiumController @Inject() (
         case None          => NotFound("Stadium not found")
       }
   }
+
 }
