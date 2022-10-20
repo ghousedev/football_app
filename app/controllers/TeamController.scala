@@ -1,6 +1,6 @@
 package controllers
 
-import models.Stadium
+import models.{Stadium, Team}
 import org.mongodb.scala.{Document, MongoDatabase}
 import org.mongodb.scala.bson._
 import org.mongodb.scala.model.Aggregates._
@@ -95,7 +95,7 @@ class TeamController @Inject() (
         var newTeam = Document()
         val maybeStadium = stadiumService.findById(teamData.stadiumId)
         val stadiumName = maybeStadium.map {
-          case Some(stadium) => stadium.name
+          case Some(team) => team.name
           case None          => "Not found"
         }
         stadiumName.map { s =>
@@ -105,9 +105,9 @@ class TeamController @Inject() (
           )
         }
         println("Yay!" + newTeam)
-        stadiumService
-          .update(id, newTeam)
-          .map(s => Redirect(routes.TeamController.show(s.id)))
+        teamService
+          .update(id, Team(id, teamData.name, teamData.stadiumId, teamData.imgUrl))
+          .map(t => Redirect(routes.TeamController.show(id)))
       }
     )
   }

@@ -3,12 +3,14 @@ package services
 import com.google.inject.Inject
 import models.{Stadium, Team}
 import org.mongodb.scala._
+import org.mongodb.scala.model.Aggregates.set
 import org.mongodb.scala.model.Filters.equal
 
 import javax.inject._
 import scala.concurrent.Future
 
-class MongoTeamService @Inject() (mongoDatabase: MongoDatabase) extends AsyncTeamService {
+class MongoTeamService @Inject() (mongoDatabase: MongoDatabase)
+    extends AsyncTeamService {
 
   val collection = mongoDatabase.getCollection("teams")
   val stadiumCollection = mongoDatabase.getCollection("stadiums")
@@ -24,10 +26,17 @@ class MongoTeamService @Inject() (mongoDatabase: MongoDatabase) extends AsyncTea
       )
   }
 
-  override def update(team: Team): Future[Option[Team]] = {
+  override def update(id: Int, team: Team): Future[Option[Team]] = {
     val aTeam = teamToDocument(team)
+    println(team)
     collection
-      .findOneAndUpdate(equal("_id", team.id), aTeam)
+      .findOneAndUpdate(
+        equal("_id", team.id),
+        set(
+          model.Field("name", team.name),
+          model.Field("imgUrl", team.imgUrl)
+        )
+      )
       .map(d => documentToTeam(d))
       .toSingle()
       .headOption()
@@ -64,7 +73,12 @@ class MongoTeamService @Inject() (mongoDatabase: MongoDatabase) extends AsyncTea
 
   private def documentToTeam(d: Document) = {
     println(d)
-    Team(d.getLong("_id"), d.getString("name"), d.getLong("stadium"), d.getString("imgUrl"))
+    Team(
+      d.getLong("_id"),
+      d.getString("name"),
+      d.getLong("stadium"),
+      d.getString("imgUrl")
+    )
   }
 
   private def documentToStadium(d: Document) = {

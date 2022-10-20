@@ -7,7 +7,7 @@ import scala.concurrent.Future
 trait AsyncTeamService {
   def create(team: Team): Unit
 
-  def update(team: Team): Future[Option[Team]]
+  def update(id: Int, team: Team): Future[Option[Team]]
 
   def findById(id: Long): Future[Option[Team]]
 
