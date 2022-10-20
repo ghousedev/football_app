@@ -1,31 +1,45 @@
 @(stadiums: List[Stadium])
-<div class="container main-container top-padding">
-<h1>Welcome, there are @stadiums.size stadiums to look at!</h1>
+
+
+<div class="container main-container">
+    <h1>We have @stadiums.size stadiums for you to view!</h1>
+    <br>
+    <a href="#" class="btn btn-md btn-danger">Add a Stadium</a>
 </div>
+
 @main("Stadiums") {
 
-    @for(stadium <- stadiums) {
-
         <div class="container">
-        <div class="row">
+            <div class="row">
+
+                @for(stadium <- stadiums) {
+
             <div class="col-md-4">
-                <div class="card mb-4 box-shadow">
-                    <img src="@stadium.imgUrl" alt="Stadium">
+                <div class="card" style="width: 18rem;">
+                    <h5 class="card-header">@stadium.name</h5>
+                    <img src="@stadium.imgUrl" alt="@stadium.name">
                     <div class="card-body">
-                        <h5 class="card-title">Name: @stadium.name</h5>
-                        <p class="card-text">City: @stadium.city</p>
-                        <p class="card-text">Number of seat: @stadium.seats</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <a href="@routes.StadiumController.show(stadium.id)">
-                                    <button type="button" class="btn btn-sm btn-danger">View</button>
-                                </a>
-                            </div>
-                        </div>
+                        <h5 class="card-title">City: Leeds</h5>
+                        <hr>
+                        <p class="card-text">The Capacity of this @stadium.name is: <br> <span class="capacity">@stadium.seats</span> </p>
+                        <a href="#" class="btn btn-sm btn-danger">View Stadium</a>
                     </div>
                 </div>
             </div>
+
+                }
+
         </div>
         </div>
-    }
+
 }
+
+
+
+
+
+
+
+
+
+
