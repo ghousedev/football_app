@@ -1,13 +1,12 @@
 package controllers
 
 import models.{Stadium, Team}
+import org.mongodb.scala.bson.BsonValue
 import org.mongodb.scala.{Document, MongoDatabase}
-import org.mongodb.scala.bson._
 import org.mongodb.scala.model.Aggregates._
 import play.api.data.Form
 import play.api.data.Forms.{longNumber, mapping, text}
 import play.api.mvc._
-import play.twirl.api.TwirlHelperImports.twirlJavaCollectionToScala
 import services.{AsyncStadiumService, AsyncTeamService}
 
 import javax.inject._
@@ -63,8 +62,6 @@ class TeamController @Inject() (
             teamService.create(t)
             Redirect(routes.TeamController.show(t.id))
           }
-        //.map(t => Redirect(routes.TeamController.show(t.id)))
-        //.getOrElse(NotFound("Stadium not found"))
       }
     )
   }
@@ -92,21 +89,10 @@ class TeamController @Inject() (
       },
       teamData => {
         val id = MurmurHash3.stringHash(teamData.name)
-        var newTeam = Document()
-        val maybeStadium = stadiumService.findById(teamData.stadiumId)
-        val stadiumName = maybeStadium.map {
-          case Some(team) => team.name
-          case None          => "Not found"
-        }
-        stadiumName.map { s =>
-          newTeam = Document(
-            "name" -> teamData.name,
-            "stadium" -> s
-          )
-        }
-        println("Yay!" + newTeam)
+        val team = Team(id, teamData.name, teamData.stadiumId, teamData.imgUrl)
+        println("Yay!" + team)
         teamService
-          .update(id, Team(id, teamData.name, teamData.stadiumId, teamData.imgUrl))
+          .update(id, team)
           .map(t => Redirect(routes.TeamController.show(id)))
       }
     )
@@ -116,30 +102,41 @@ class TeamController @Inject() (
     mongoDatabase
       .getCollection("teams")
       .aggregate(
-        List(
-          lookup("stadiums", "stadium", "_id", "stadiumDetails"),
-          out("temp")
+        Seq(
+          lookup("stadiums", "stadium", "_id", "stadiumDetails")
         )
       )
       .toSingle()
       .headOption()
       .flatMap {
-        case Some(teamInfo) =>
-          val stadium: Stadium = parseStadiumDoc(teamInfo)
+        case Some(stadiumInfo) =>
+          val stadiumDetails = getArrayFromDocument(stadiumInfo, "stadiumDetails").head
+          println(stadiumDetails)
+          val stadium = Stadium(stadiumDetails("_id").toString.toLong, stadiumDetails("name").toString, stadiumDetails("city").toString, stadiumDetails("country").toString, stadiumDetails("capacity").toString.toInt, stadiumDetails("imgUrl").toString)
           teamService
             .findById(id)
             .map {
-              case Some(team) => Ok(views.html.team.show(team.id, teamInfo, stadium))
+              case Some(team) => Ok(views.html.team.show(team.id, stadiumDetails("imgUrl").toString, team.name, stadium))
               case None       => NotFound("Team not found")
             }
         case None => Future(NotFound("Team not found"))
       }
   }
+  case class TeamView(id: Long, teamName: String, imgUrl: String, stadium: Stadium)
+
+  private def getArrayFromDocument(d: Document, field: String): List[Map[Any, Any]] = {
+    import scala.jdk.CollectionConverters._
+    d
+      .getList(field, classOf[java.util.Map[_, _]])
+      .asScala
+      .toList
+      .map(_.asScala.toMap)
+  }
 
   private def parseStadiumDoc(teamInfo: Document) = {
-    val stadiumInfo = teamInfo("stadiumDetails").toString.split(",").toList
-    val stadiumInfoList = stadiumInfo.map(s => s.trim.split(": ").apply(1).replace("\"", ""))
+    val stadiumInfo1 = teamInfo("stadiumDetails").toString.split(",").toList
+    val stadiumInfoList = stadiumInfo1.map(s => s.trim.split(": ").apply(1).replace("\"", ""))
     val stadium = Stadium(stadiumInfoList.head.toLong, stadiumInfoList(1), stadiumInfoList(2), stadiumInfoList(3), stadiumInfoList(4).toInt)
-    stadium
+    TeamView(teamInfo("_id").asInt64.getValue, teamInfo("name").toString, teamInfo("imgUrl").toString, stadium)
   }
 }
