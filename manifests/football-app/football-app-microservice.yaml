@@ -22,20 +22,20 @@ metadata:
   labels:
     stack: frontend
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /team-1-football-app/$2
-  name: team-1-football-app-ingress
+    nginx.ingress.kubernetes.io/rewrite-target: /team-1-football-app$1$2
+  name: team-1-football-app-ingress-path
   namespace: default
 spec:
   rules:
-    -   http:
-          paths:
-            -   path: /team-1-football-app(/|$)(.*)
-                pathType: Prefix
-                backend:
-                  service:
-                    name: team-1-football-app-service
-                    port:
-                      number: 30201
+    - http:
+        paths:
+          -   path: /team-1-football-app(/|$)(.*)
+              pathType: Prefix
+              backend:
+                service:
+                  name: team-1-football-app-service
+                  port:
+                    number: 30201
 ---
 kind: Deployment
 apiVersion: apps/v1
