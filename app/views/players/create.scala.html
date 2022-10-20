@@ -3,35 +3,40 @@
 
 @main("Create Player") {
 <div class="container main-container">
-    <br>
-    <h1>Create a new Player</h1>
-    @helper.form(action = routes.PlayerController.create()) {
-    @CSRF.formField
-    @helper.inputText(playerForm("name"))
-    @helper.inputText(playerForm("surname"))
-    @helper.select(
-    field = playerForm("team"),
-    options = teamList.map(t => t.id.toString -> t.name)
-
-    )
-    @helper.select(
-    field = playerForm("position"),
-    options = List(
-    "GoalKeeper" -> "GoalKeeper",
-    "RightFullback" -> "RightFullback",
-    "LeftFullback" -> "LeftFullback",
-    "CenterBack" -> "CenterBack",
-    "Sweeper" -> "Sweeper",
-    "Striker" -> "Striker",
-    "HoldingMidfielder" -> "HoldingMidfielder",
-    "RightMidfielder" -> "RightMidfielder",
-    "Central" -> "Central",
-    "AttackingMidfielder" -> "AttackingMidfielder",
-    "LeftMidfielder" -> "LeftMidfielder"
-    )
-
-    )
-    <input type="submit" id="submit" value="Submit"/>
-    }
+    <div class="container stadium-form">
+        <div class="form">
+            <div class="title">Let's create a player!</div>
+            <div class="subtitle">The Football App</div>
+            @helper.form(action = routes.PlayerController.create()) {
+            <hr>
+            @CSRF.formField
+            @helper.inputText(playerForm("name"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
+            "First Name", '_label -> "" )
+            @helper.inputText(playerForm("surname"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
+            "Surname", '_label -> "" )
+            @helper.select(
+            field = playerForm("team"),
+            options = teamList.map(t => t.id.toString -> t.name), '_showConstraints -> false, 'class -> "input", '_label
+            -> "Select a Team")
+            @helper.select(
+            field = playerForm("position"),
+            options = List(
+            "GoalKeeper" -> "GoalKeeper",
+            "RightFullback" -> "RightFullback",
+            "LeftFullback" -> "LeftFullback",
+            "CenterBack" -> "CenterBack",
+            "Sweeper" -> "Sweeper",
+            "Striker" -> "Striker",
+            "HoldingMidfielder" -> "HoldingMidfielder",
+            "RightMidfielder" -> "RightMidfielder",
+            "Central" -> "Central",
+            "AttackingMidfielder" -> "AttackingMidfielder",
+            "LeftMidfielder" -> "LeftMidfielder"
+            ), '_showConstraints -> false, 'class -> "input", '_label -> "Select a Position")
+            <input class="btn btn-lg btn-danger" type="submit" id="submit" value="Submit"/>
+            }
+        </div>
+    </div>
 </div>
+
 }
