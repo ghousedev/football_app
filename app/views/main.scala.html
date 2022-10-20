@@ -35,8 +35,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="@routes.PlayerController.create">Players</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@routes.StadiumController.create">Stadiums</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="@routes.StadiumController.create">Stadiums</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="@routes.StadiumController.list">View Stadiums</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="@routes.StadiumController.create">Add a Stadium</a>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="@routes.HomeController.table">The Tables</a>

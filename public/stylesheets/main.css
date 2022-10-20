@@ -69,6 +69,7 @@ border: solid 2px #c82032;
 .card{
     text-align: center;
     border: 1px solid #353a40;
+    margin-bottom: 40px;
 
 }
 .card-header{
