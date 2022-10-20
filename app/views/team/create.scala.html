@@ -7,6 +7,7 @@
         <div class="form">
             <div class="title">Let's create a team!</div>
             <div class="subtitle">The Football App</div>
+            <hr>
             @helper.form(action = routes.TeamController.create()) {
             @CSRF.formField
             @helper.inputText(teamForm("name"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
