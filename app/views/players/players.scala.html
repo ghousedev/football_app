@@ -1,200 +1,33 @@
 @(players: List[Player])
 
-@main("Grimsby Town - Players") {
 <div class="container main-container">
   <br>
-  <h1>Meet the Players</h1>
-  <p>The only thing that's not GRIM about Grimsby Town is the players</p>
+  <br>
+  <h1>We have @players.size player for you to view!</h1>
+  <br>
+  <a href="@routes.StadiumController.create" class="btn btn-md btn-danger">Add a Stadium</a>
 </div>
-<div class="container">
 
+@main("Players") {
+
+<div class="container">
   <div class="row">
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/germans.png")" alt="Germans">
-        <div class="card-body">
-          <h5 class="card-title">Germans</h5>
-          <p class="card-text">Forword</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/lee.png")" alt="Lee">
-        <div class="card-body">
-          <h5 class="card-title">Lee</h5>
-          <p class="card-text">Forward</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/a.png")" alt="Adil">
-        <div class="card-body">
-          <h5 class="card-title">Adil</h5>
-          <p class="card-text">Right Winger</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/j.png")" alt="Jacques">
-        <div class="card-body">
-          <h5 class="card-title">Jacques</h5>
-          <p class="card-text">Left Winger</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/lu.png")" alt="Laura">
-        <div class="card-body">
-          <h5 class="card-title">Laura</h5>
-          <p class="card-text">Midfielder</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/n.png")" alt="Ned">
-        <div class="card-body">
-          <h5 class="card-title">Ned</h5>
-          <p class="card-text">Midfielder</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/p.png")" alt="Phu">
-        <div class="card-body">
-          <h5 class="card-title">Phu</h5>
-          <p class="card-text">First Centre Back</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/r.png")" alt="Romel">
-        <div class="card-body">
-          <h5 class="card-title">Romel</h5>
-          <p class="card-text">Second Centre Back</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/ro.png")" alt="Rob">
-        <div class="card-body">
-          <h5 class="card-title">Rob</h5>
-          <p class="card-text">Left Back</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/ste.png")" alt="Ste">
-        <div class="card-body">
-          <h5 class="card-title">Ste</h5>
-          <p class="card-text">Right Back</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/stu.png")" alt="Stu">
-        <div class="card-body">
-          <h5 class="card-title">Stu</h5>
-          <p class="card-text">Goalkeeper</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" src="@routes.Assets.versioned("images/players/gary.png")" alt="Gary">
-        <div class="card-body">
-          <h5 class="card-title">Gary</h5>
-          <p class="card-text">Sub</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-danger">View</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     @for(player <- players) {
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card mb-4 box-shadow">
-            <div class="card-body">
-              <h5 class="card-title">@player.firstName</h5>
-              <p class="card-text">@player.position</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-danger"><a href="@routes.PlayerController.show(player.id)">View</a></button>
-                </div>
-              </div>
-            </div>
-          </div>
+
+    <div class="col-md-4">
+      <div class="card" style="width: 18rem;">
+        <h5 class="card-header">@player.firstName</h5>
+        <img src="" alt="@player.firstName">
+        <div class="card-body">
+          <h5 class="card-title">Position: @player.position</h5>
+          <hr>
+          <a href="" class="btn btn-sm btn-danger">View Player</a>
         </div>
-      }
+      </div>
+    </div>
+    }
   </div>
 </div>
+
 }
