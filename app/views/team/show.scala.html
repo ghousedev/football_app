@@ -7,7 +7,7 @@
   <div class="row">
     <div class="col-md-4">
       <div class="card mb-4 box-shadow">
-        <img src="@teamInfo("imgUrl")" alt="@stadium.name">
+        <img src="@teamInfo("imgUrl").asString.getValue" alt="@stadium.name">
         <div class="card-body">
           <h5 class="card-title">@teamInfo("name").asString.getValue</h5>
           <p class="card-body">Plays at: @stadium.name, which has a capacity of @stadium.seats.</p>
