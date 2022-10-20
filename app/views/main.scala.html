@@ -32,8 +32,21 @@
                 <li class="nav-item">
                     <a class="nav-link" href="@routes.HomeController.index">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@routes.PlayerController.create">Players</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="@routes.PlayerController.create">Players</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="@routes.PlayerController.list">View Players</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="@routes.PlayerController.create">Add a Player</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="@routes.TeamController.create">Teams</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="@routes.TeamController.list">View Teams</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="@routes.TeamController.create">Add a Team</a>
+                    </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="@routes.StadiumController.create">Stadiums</a>
