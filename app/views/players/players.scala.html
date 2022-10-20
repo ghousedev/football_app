@@ -178,10 +178,23 @@
       </div>
     </div>
 
-    <ul>
-      @for(player <- players) {
-        <li><a href="@routes.PlayerController.show(player.id)">@player.firstName</a></li>
+    @for(player <- players) {
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <div class="card-body">
+              <h5 class="card-title">@player.firstName</h5>
+              <p class="card-text">@player.position</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-danger"><a href="@routes.PlayerController.show(player.id)">View</a></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       }
-    </ul>
   </div>
-  }
+</div>
+}
