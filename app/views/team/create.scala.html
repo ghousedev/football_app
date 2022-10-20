@@ -2,17 +2,25 @@
 @import views.html.helper.CSRF
 
 @main("Create Team") {
-<div class="container top-padding">
-        @helper.form(action = routes.TeamController.create()) {
-        @CSRF.formField
-        @helper.inputText(teamForm("name"))
-        @helper.select(
+<div class="container main-container">
+    <div class="container stadium-form">
+        <div class="form">
+            <div class="title">Let's create a team!</div>
+            <div class="subtitle">The Football App</div>
+            @helper.form(action = routes.TeamController.create()) {
+            @CSRF.formField
+            @helper.inputText(teamForm("name"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
+            "Team Name", '_label -> "" )
+            @helper.select(
             field = teamForm("stadium"),
-            options = stadiumList.map(s => s.id.toString -> s.name)
-
-        )
-        @helper.inputText(teamForm("imgUrl"))
-        <input type="submit" id="submit" value="Submit"/>
-    }
+            options = stadiumList.map(s => s.id.toString -> s.name), '_showConstraints -> false, 'class -> "input", '_label -> "Select a Stadium")
+            @helper.inputText(teamForm("imgUrl"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
+            "Image URL", '_label -> "" )
+            <input class="btn btn-lg btn-danger" type="submit" id="submit" value="Submit"/>
+            }
+        </div>
+    </div>
 </div>
+</div>
+
 }
