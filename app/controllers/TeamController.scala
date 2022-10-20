@@ -116,13 +116,12 @@ class TeamController @Inject() (
           teamService
             .findById(id)
             .map {
-              case Some(team) => Ok(views.html.team.show(team.id, stadiumDetails("imgUrl").toString, team.name, stadium))
+              case Some(team) => Ok(views.html.team.show(team.id, team.imgUrl, team.name, stadium))
               case None       => NotFound("Team not found")
             }
         case None => Future(NotFound("Team not found"))
       }
   }
-  case class TeamView(id: Long, teamName: String, imgUrl: String, stadium: Stadium)
 
   private def getArrayFromDocument(d: Document, field: String): List[Map[Any, Any]] = {
     import scala.jdk.CollectionConverters._
@@ -131,12 +130,5 @@ class TeamController @Inject() (
       .asScala
       .toList
       .map(_.asScala.toMap)
-  }
-
-  private def parseStadiumDoc(teamInfo: Document) = {
-    val stadiumInfo1 = teamInfo("stadiumDetails").toString.split(",").toList
-    val stadiumInfoList = stadiumInfo1.map(s => s.trim.split(": ").apply(1).replace("\"", ""))
-    val stadium = Stadium(stadiumInfoList.head.toLong, stadiumInfoList(1), stadiumInfoList(2), stadiumInfoList(3), stadiumInfoList(4).toInt)
-    TeamView(teamInfo("_id").asInt64.getValue, teamInfo("name").toString, teamInfo("imgUrl").toString, stadium)
   }
 }
