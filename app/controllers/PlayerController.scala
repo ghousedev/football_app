@@ -60,8 +60,7 @@ class PlayerController @Inject() (
       },
       playersData => {
         val maybeTeam = teamService.findById(playersData.teamId)
-        val id =
-          MurmurHash3.stringHash(playersData.firstName)
+        val id = MurmurHash3.stringHash(playersData.firstName)
         maybeTeam
           .map { t =>
             Player(
