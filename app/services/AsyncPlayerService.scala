@@ -15,7 +15,7 @@ trait AsyncPlayerService {
 
   def findByFirstName(firstName: String): Future[Option[Player]]
 
-  def findByLastName(lastName: String): Future[Option[Player]]
+  def findByLastName(surname: String): Future[Option[Player]]
 
   def findByPosition(position: Position): Future[List[Player]]
 }
