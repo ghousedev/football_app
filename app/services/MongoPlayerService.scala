@@ -83,12 +83,13 @@ class MongoPlayerService @Inject() (mongoDatabase: MongoDatabase) extends AsyncP
     .foldLeft(List[Player]())((acc, player) => player :: acc)
     .head()
 
-  private def documentToPlayer(d: Document): Player = {
+  def documentToPlayer(d: Document): Player = {
+    // pass position as a val and pattern match on it
+
     Player(
       d.getLong("_id"),
-      10L,
-      //d.get("position"), // Must be of child type of Position
-      GoalKeeper,
+      d.getLong("team"),
+      d.getString("position"),
       d.getString("firstName"),
       d.getString("surname")
     )
@@ -101,16 +102,16 @@ class MongoPlayerService @Inject() (mongoDatabase: MongoDatabase) extends AsyncP
       .toSingle()
       .headOption()
   }
-  override def findByLastName(lastName: String): Future[Option[Player]] = {
+  override def findByLastName(surname: String): Future[Option[Player]] = {
     playerCollection
-      .find(equal("surname", lastName))
+      .find(equal("surname", surname))
       .map(documentToPlayer)
       .toSingle()
       .headOption()
   }
   override def findByPosition(position: Position): Future[List[Player]] = {
     playerCollection
-      .find(equal("position", position.toString))
+      .find(equal("position", position))
       .map(documentToPlayer)
       .foldLeft(List[Player]())((acc, player) => player :: acc)
       .head()

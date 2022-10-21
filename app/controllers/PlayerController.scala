@@ -30,7 +30,7 @@ class PlayerController @Inject() (
 ) extends BaseController
     with play.api.i18n.I18nSupport {
 
-  def list() = Action.async { implicit request =>
+  def list(): Action[AnyContent] = Action.async { implicit request =>
     playerService.findAll().map(xs => Ok(views.html.players.players(xs)))
   }
 
@@ -50,7 +50,7 @@ class PlayerController @Inject() (
       .map(xs => Ok(views.html.players.create(playersForm, xs)))
   }
 
-  def create() = Action.async { implicit request =>
+  def create(): Action[AnyContent] = Action.async { implicit request =>
     playersForm.bindFromRequest.fold(
       formWithErrors => {
         println("Nay!" + formWithErrors)
@@ -69,20 +69,7 @@ class PlayerController @Inject() (
               t match {
                 case Some(t) => t.id
               },
-              playersData.position match {
-                case "GoalKeeper"          => GoalKeeper
-                case "RightFullback"       => RightFullback
-                case "LeftFullback"        => LeftFullback
-                case "CenterBack"          => CenterBack
-                case "Sweeper"             => Sweeper
-                case "Striker"             => Striker
-                case "HoldingMidfielder"   => HoldingMidfielder
-                case "RightMidfielder"     => RightMidfielder
-                case "Central"             => Central
-                case "AttackingMidfielder" => AttackingMidfielder
-                case "LeftMidfielder"      => LeftMidfielder
-                case _                     => GoalKeeper
-              },
+              playersData.position,
               playersData.firstName,
               playersData.surname
             )
@@ -95,7 +82,7 @@ class PlayerController @Inject() (
     )
   }
 
-  def edit(id: Long) = Action.async { implicit request =>
+  def edit(id: Long): Action[AnyContent] = Action.async { implicit request =>
     playerService
       .findById(id)
       .map {
@@ -114,7 +101,7 @@ class PlayerController @Inject() (
       }
   }
 
-  def update() = Action.async { implicit request =>
+  def update(): Action[AnyContent] = Action.async { implicit request =>
     playersForm.bindFromRequest.fold(
       formWithErrors => {
         println("Nay!" + formWithErrors)
@@ -133,20 +120,7 @@ class PlayerController @Inject() (
               t match {
                 case Some(t) => t.id
               },
-              playersData.position match {
-                case "GoalKeeper"          => GoalKeeper
-                case "RightFullback"       => RightFullback
-                case "LeftFullback"        => LeftFullback
-                case "CenterBack"          => CenterBack
-                case "Sweeper"             => Sweeper
-                case "Striker"             => Striker
-                case "HoldingMidfielder"   => HoldingMidfielder
-                case "RightMidfielder"     => RightMidfielder
-                case "Central"             => Central
-                case "AttackingMidfielder" => AttackingMidfielder
-                case "LeftMidfielder"      => LeftMidfielder
-                case _                     => GoalKeeper
-              },
+              playersData.position,
               playersData.firstName,
               playersData.surname
             )
@@ -160,12 +134,10 @@ class PlayerController @Inject() (
   }
 
 
-
-
-  def show(id: Long) = Action.async { implicit request =>
+  def show(id: Long): Action[AnyContent] = Action.async { implicit request =>
     playerService.findById(id).map {
       case Some(player) => Ok(views.html.players.show(player))
-      case None         => NotFound("Player not found")
+      case None => NotFound("Player not found")
     }
   }
 }
