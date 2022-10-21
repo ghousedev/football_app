@@ -53,6 +53,7 @@ class MongoPlayerService @Inject() (mongoDatabase: MongoDatabase) extends AsyncP
       "surname" -> player.surname,
       "position" -> player.position.toString,
       "team" -> player.teamId,
+      "imgUrl" -> player.imgUrl,
       //"stadium" -> stadiumCollection.find(equal("_id", getStadiumId(player))).map(d => d.get("_id")),
     )
   }
@@ -66,7 +67,8 @@ class MongoPlayerService @Inject() (mongoDatabase: MongoDatabase) extends AsyncP
             "firstName" -> player.firstName,
             "surname" -> player.surname,
             "position" -> player.position.toString,
-            "team" -> player.teamId
+            "team" -> player.teamId,
+            "imgUrl" -> player.imgUrl,
           )
         )
       )
@@ -90,7 +92,8 @@ class MongoPlayerService @Inject() (mongoDatabase: MongoDatabase) extends AsyncP
       //d.get("position"), // Must be of child type of Position
       GoalKeeper,
       d.getString("firstName"),
-      d.getString("surname")
+      d.getString("surname"),
+      d.getString("imgUrl")
     )
   }
 

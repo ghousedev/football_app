@@ -6,6 +6,7 @@ import org.mongodb.scala.Document
 import javax.inject._
 import play.api.data.Form
 import play.api.data.Forms.{longNumber, mapping, text}
+import play.api.data.validation.Constraints.nonEmpty
 import play.api.mvc._
 
 import scala.util.hashing.MurmurHash3
@@ -19,7 +20,8 @@ case class PlayerData(
     teamId: Long,
     position: String,
     firstName: String,
-    surname: String
+    surname: String,
+    imgUrl: String
 )
 
 class PlayerController @Inject() (
@@ -39,7 +41,8 @@ class PlayerController @Inject() (
       "team" -> longNumber,
       "name" -> text,
       "surname" -> text,
-      "position" -> text
+      "position" -> text,
+      "imgUrl" -> text
     )(PlayerData.apply) //Construction
     (PlayerData.unapply) //Destructuring
   )
@@ -84,7 +87,8 @@ class PlayerController @Inject() (
                 case _                     => GoalKeeper
               },
               playersData.firstName,
-              playersData.surname
+              playersData.surname,
+              playersData.imgUrl
             )
           }
           .map { p =>
@@ -105,7 +109,8 @@ class PlayerController @Inject() (
               player.teamId,
               player.position.toString,
               player.firstName,
-              player.surname
+              player.surname,
+              player.imgUrl
             )
           )
           Ok(views.html.players.update(filledForm))
@@ -148,7 +153,8 @@ class PlayerController @Inject() (
                 case _                     => GoalKeeper
               },
               playersData.firstName,
-              playersData.surname
+              playersData.surname,
+              playersData.imgUrl
             )
           }
           .map { p =>

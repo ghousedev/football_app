@@ -11,14 +11,12 @@
             <hr>
             <h6>Before you can create a Player or a Team, <br> you must create a Stadium.</h6>
             @CSRF.formField
-            @helper.inputText(playerForm("name"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
-            "First Name", '_label -> "" )
-            @helper.inputText(playerForm("surname"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
-            "Surname", '_label -> "" )
             @helper.select(
             field = playerForm("team"),
             options = teamList.map(t => t.id.toString -> t.name), '_showConstraints -> false, 'class -> "input", '_label
             -> "Select a Team")
+
+
             @helper.select(
             field = playerForm("position"),
             options = List(
@@ -34,6 +32,12 @@
             "AttackingMidfielder" -> "AttackingMidfielder",
             "LeftMidfielder" -> "LeftMidfielder"
             ), '_showConstraints -> false, 'class -> "input", '_label -> "Select a Position")
+            @helper.inputText(playerForm("name"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
+            "First Name", '_label -> "" )
+            @helper.inputText(playerForm("surname"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
+            "Surname", '_label -> "" )
+            @helper.inputText(playerForm("imgUrl"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
+            "Image URL", '_label -> "" )
             <input class="btn btn-lg btn-danger" type="submit" id="submit" value="Submit"/>
             }
         </div>
