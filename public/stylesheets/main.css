@@ -36,6 +36,26 @@ margin-right: 5px;
 width: 20%;
 }
 
+.instruction-box{
+  position: relative;
+  background-color: #7895B2;
+  color: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  width: 500px;
+  margin: 0 25%;
+
+}
+
+.instruction-box-instruction{
+margin-bottom: 40px;
+}
+
+.instruction-box h5{
+    font-size: 25px;
+}
+
+
 footer{
 position: fixed;
 width: 100%;

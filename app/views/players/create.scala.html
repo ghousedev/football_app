@@ -9,6 +9,7 @@
             <div class="subtitle">The Football App</div>
             @helper.form(action = routes.PlayerController.create()) {
             <hr>
+            <h6>Before you can create a Player or a Team, <br> you must create a Stadium.</h6>
             @CSRF.formField
             @helper.inputText(playerForm("name"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
             "First Name", '_label -> "" )

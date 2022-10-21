@@ -2,13 +2,15 @@
 @import views.html.helper.CSRF
 
 @main("Create Team") {
+
 <div class="container main-container">
     <div class="container stadium-form">
         <div class="form">
             <div class="title">Let's create a team!</div>
             <div class="subtitle">The Football App</div>
-            <hr>
             @helper.form(action = routes.TeamController.create()) {
+            <hr>
+            <h6>Before you can create a Team or a Player, <br> you must create a Stadium.</h6>
             @CSRF.formField
             @helper.inputText(teamForm("name"), '_showConstraints -> false, 'class -> "input", 'placeholder ->
             "Team Name", '_label -> "" )

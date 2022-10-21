@@ -3,17 +3,36 @@
 @main("The Football App") {
 
 <div class="container main-container">
-  <br>
-  <br>
-  <h1>Welcome to the <span class="grim-red-color">FOOTBALL APP</span></h1>
-  <br>
-  <p>The best app for creating and searching football teams</p>
-  <br>
-  <img class="main-football spin" src="@routes.Assets.versioned("images/football-logo.png")" alt="The Football App Logo">
-  <br>
-  <br>
-  <br>
-  <p><a class="btn btn-danger btn-lg" href="/teamOfTheYear" role="button">Meet our team of the year</a></p>
-</div>
+    <br>
+    <br>
+    <h1>Welcome to the <span class="grim-red-color">FOOTBALL APP</span></h1>
+    <br>
+    <p>The best app for creating and searching football teams</p>
+    <br>
+    <p>CLICK THE BALL FOR INSTRUCTIONS</p>
 
-}
+    <img data-toggle="collapse" href="#collapseExample" class="main-football spin" src="@routes.Assets.versioned("images/football-logo.png")" alt="The Football App Logo">
+    <br>
+    <br>
+
+    <div class="collapse" id="collapseExample">
+        <div class="instruction-box">
+            <h2 class="instruction-box-header">INSTRUCTIONS</h2>
+            <hr>
+            <h5 class="instruction-box-steps">Step 1:</h5>
+            <h5 class="instruction-box-instruction">Create a Stadium</h5>
+            <h5 class="instruction-box-steps">Step 2:</h5>
+            <h5 class="instruction-box-instruction">Create a Team</h5>
+            <h5 class="instruction-box-steps">Step 3:</h5>
+            <h5 class="instruction-box-instruction">Create a Player</h5>
+            <a href="@routes.StadiumController.create" class="btn btn-md btn-light">Get started!</a>
+        </div >
+    </div>
+
+
+        <br>
+        <br>
+        <p><a class="btn btn-danger btn-lg" href="/teamOfTheYear" role="button">Meet our team of the year</a></p>
+    </div>
+
+    }
