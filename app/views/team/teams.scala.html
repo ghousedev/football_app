@@ -1,27 +1,32 @@
 @(teams: List[Team])
 
 @main("Teams") {
-<h1>Welcome, there are @teams.size teams to look at!</h1>
-@for(team <- teams) {
+
+<div class="container main-container">
+    <br>
+    <br>
+    <h1>We have @teams.size teams for you to view!</h1>
+    <br>
+    <a href="@routes.TeamController.create" class="btn btn-md btn-danger">Add a Team!</a>
+</div>
+
+
 <div class="container">
     <div class="row">
+
+        @for(team <- teams) {
+
         <div class="col-md-4">
-            <div class="card mb-4 box-shadow">
+            <div class="card" style="width: 18rem;">
+                <h5 class="card-header">@team.name</h5>
+                <img src="@team.imgUrl" alt="@team.name">
                 <div class="card-body">
-                    <h5 class="card-title">Name: @team.name</h5>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <a href="@routes.TeamController.show(team.id)">
-                                <button type="button" class="btn btn-sm btn-danger">View</button>
-                            </a>
-                        </div>
-                    </div>
+                    <a href="@routes.TeamController.show(team.id)" class="btn btn-sm btn-danger">View Team</a>
                 </div>
             </div>
         </div>
+        }
     </div>
 </div>
-
-}
 
 }

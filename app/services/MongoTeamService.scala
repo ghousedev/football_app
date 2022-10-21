@@ -27,11 +27,10 @@ class MongoTeamService @Inject() (mongoDatabase: MongoDatabase)
   }
 
   override def update(id: Int, team: Team): Future[Option[Team]] = {
-    val aTeam = teamToDocument(team)
-    println(team)
+    println(id)
     collection
       .findOneAndUpdate(
-        equal("_id", team.id),
+        equal("_id", id),
         set(
           model.Field("name", team.name),
           model.Field("imgUrl", team.imgUrl)

@@ -7,7 +7,6 @@
 
 GET     /                           controllers.HomeController.index()
 GET     /home                       controllers.HomeController.index()
-#GET    /players                    controllers.HomeController.players()
 GET     /table                      controllers.HomeController.table()
 GET     /teamOfTheYear              controllers.HomeController.teamOfTheYear()
 GET     /team-of-the-year-manager   controllers.HomeController.teamOfTheYearManager()

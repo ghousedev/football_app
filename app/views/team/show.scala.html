@@ -1,21 +1,20 @@
 @(teamId: Long, name: String, imgUrl: String, stadium: Stadium)
 
 @main("View Team") {
-<div class="container top-padding">
+<div class="container main-container">
+  <br>
+  <br>
+  <h1>Football Teams</h1>
+  <br>
+</div>
+<div class="container">
   <div class="row">
     <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img src="@imgUrl" alt="@stadium.name">
+      <div class="card" style="width: 18rem;">
+        <h5 class="card-header">name</h5>
+        <img src="" alt="">
         <div class="card-body">
-          <h5 class="card-title">@name</h5>
-          <p class="card-body">Plays at: @stadium.name, which has a capacity of @stadium.seats.</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <a href="@routes.TeamController.edit(teamId)">
-                <button type="button" class="btn btn-sm btn-danger">Edit</button>
-              </a>
-            </div>
-          </div>
+          <a href="" class="btn btn-sm btn-danger">View Team</a>
         </div>
       </div>
     </div>

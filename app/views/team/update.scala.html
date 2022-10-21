@@ -6,7 +6,7 @@
     <br>
     <h1>Update Team</h1>
     <div class="container">
-        @helper.form(action = routes.TeamController.show(team.id)) {
+        @helper.form(action = routes.TeamController.update()) {
         @CSRF.formField
         @helper.inputText(teamForm("name"))
         @helper.inputText(teamForm("stadium"))

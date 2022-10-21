@@ -54,9 +54,14 @@ class TeamController @Inject() (
         val id = MurmurHash3.stringHash(teamData.name)
         maybeStadium
           .map { s =>
-            models.Team(id, teamData.name, s match {
+            models.Team(
+              id,
+              teamData.name,
+              s match {
                 case Some(stadium) => stadium.id
-              })
+              },
+              teamData.imgUrl
+            )
           }
           .map { t =>
             teamService.create(t)
@@ -110,20 +115,34 @@ class TeamController @Inject() (
       .headOption()
       .flatMap {
         case Some(stadiumInfo) =>
-          val stadiumDetails = getArrayFromDocument(stadiumInfo, "stadiumDetails").head
+          val stadiumDetails =
+            getArrayFromDocument(stadiumInfo, "stadiumDetails").head
           println(stadiumDetails)
-          val stadium = Stadium(stadiumDetails("_id").toString.toLong, stadiumDetails("name").toString, stadiumDetails("city").toString, stadiumDetails("country").toString, stadiumDetails("capacity").toString.toInt, stadiumDetails("imgUrl").toString)
+          val stadium = Stadium(
+            stadiumDetails("_id").toString.toLong,
+            stadiumDetails("name").toString,
+            stadiumDetails("city").toString,
+            stadiumDetails("country").toString,
+            stadiumDetails("capacity").toString.toInt,
+            stadiumDetails("imgUrl").toString
+          )
           teamService
             .findById(id)
             .map {
-              case Some(team) => Ok(views.html.team.show(team.id, team.name, team.imgUrl, stadium))
-              case None       => NotFound("Team not found")
+              case Some(team) =>
+                Ok(
+                  views.html.team.show(team.id, team.name, team.imgUrl, stadium)
+                )
+              case None => NotFound("Team not found")
             }
         case None => Future(NotFound("Team not found"))
       }
   }
 
-  private def getArrayFromDocument(d: Document, field: String): List[Map[Any, Any]] = {
+  private def getArrayFromDocument(
+      d: Document,
+      field: String
+  ): List[Map[Any, Any]] = {
     import scala.jdk.CollectionConverters._
     d
       .getList(field, classOf[java.util.Map[_, _]])
