@@ -1,12 +1,11 @@
 package models
 
-import org.junit.Before
 import org.scalatestplus.play.PlaySpec
 
 class PlayerSpec extends PlaySpec {
 
   "PlayerSpec" should {
-      val player = Player(10L, 15L ,GoalKeeper, "Ian", "Grim")
+      val player = Player(10L, 15L ,GoalKeeper, "Ian", "Grim", "imgUrl")
 
     "have an id" in {
       player.id mustEqual 10L
@@ -26,6 +25,10 @@ class PlayerSpec extends PlaySpec {
 
     "have a position" in {
       player.position mustEqual GoalKeeper
+    }
+
+    "have an imgUrl" in {
+      player.imgUrl mustEqual "imgUrl"
     }
   }
 }
